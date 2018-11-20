@@ -1,11 +1,15 @@
-#include <vector>
-using std::vector
+using std::cout;
 
-Class Graph 
+struct node
+{
+  int perm;
+  node *next;
+};
+
+Class Graph
 {
  private:
-   vector< vector<int> > v;
-    int currentsize;
+    list <node> alist;
 
    public:
     Graph ();

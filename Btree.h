@@ -1,37 +1,35 @@
 include "User.h"
 
-// A BTree node 
-class BTreeNode 
-{ 
-    int *keys;  // An array of keys 
-    int t;      // Minimum degree (defines the range for number of keys) 
-    BTreeNode **C; // An array of child pointers 
-    int n;     // Current number of keys 
-    User u; //holds user if leaf condition is true
-    bool leaf; // Is true when node is leaf. Otherwise false 
-public: 
-    BTreeNode(int _t, bool _leaf);   // Constructor 
-    // A function to traverse all nodes in a subtree rooted with this node 
-    void traverse(); 
-    // A function to search a key in the subtree rooted with this node.     
-    BTreeNode *search(int k);   // returns NULL if k is not present. 
-  
-// Make the BTree friend of this so that we can access private members of this 
-// class in BTree functions 
-friend class BTree; 
-}; 
+const int MAXM = 4;   // max number of keys in a node
+const int MINM = 2;    // min number of keys in a node
+const int MAXL = 2  // max no of elements per leaf
+
+// A BTree node
+class BTreeNode
+{
+    int keys [M];  // An array of keys
+    int count;     // Current number of keys
+    User u1;    //if leaf u1 and u2 can be not null
+    User u2;
+    bool leaf; // Is true when node is leaf. Otherwise false
+
+// Make the BTree friend of this so that we can access private members of this
+// class in BTree functions
+friend class Btree;
+};
 
 
 Class Btree
 {
     private:
-        const int minM = 2;
-        const int maxM = 4;
-        const int minL = 1;
-        const int maxL = 2;
+      BTreeNode* currentnode;
+      BTreeNode* root;
+
     public:
         bTree()
-        void addinBtree(user u);
+        void insert(user u);
         bool finduser(int perm);
+        void traverse ()
+
 
 };
