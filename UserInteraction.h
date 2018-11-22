@@ -1,11 +1,14 @@
-#include "User.h";
+#ifndef _USERINTERACTION
+#define _USERINTERACTION
+#include "User.h"
 
-Class UserInteraction
+class UserInteraction
 {
     private:
     void addUsertoBTree (User u);
 
     public:
+	void inputFile();
     void add (User u);
     //search and say true or false
     bool findUser(int perm);
@@ -13,3 +16,4 @@ Class UserInteraction
     void findUserDetail (int perm);
     void reccomendfriends (int perm);
 };
+#endif

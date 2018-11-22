@@ -4,18 +4,7 @@
 CXX =g++
 CXXFLAGS = -g -std=c++11 -Wall -Wextra -Wno-unused-parameter -Wno-unused-private-field
 
-#BINARIES= hashtable hashtabletest wordheap wordheaptest main
-
-#hashtabletest: hashtable.o hashtabletest.o
-#	${CXX} $^ -o $@
-
-#wordheaptest: wordheap.o hashtable.o wordheaptest.o
-	#${CXX} $^ -o $@
-
-#main: main.o wordheap.o hashtable.o
-#	${CXX} $^ -o $@
-
-
-
+main: 
+	g++ -o main Main.cpp UserInteraction.cpp
 clean:
-	rm -f ${BINARIES} *.o
+	rm -f main
