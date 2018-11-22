@@ -1,19 +1,18 @@
-using std::cout;
+#ifndef _GRAPH
+#define _GRAPH
+#include <vector>
 
-struct node
-{
-  int perm;
-  node *next;
-};
-
-Class Graph
+class Graph
 {
  private:
-    list <node> alist;
+    std::vector<std::vector <int>> alist;
 
    public:
-    Graph ();
-    void addinGraph(int perm);
+    //Graph ();
+    int insertInGraph(std::vector<int> userAndFriends);
+	void print();
     void DFS ();
 
 };
+
+#endif

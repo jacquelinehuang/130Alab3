@@ -11,7 +11,7 @@ void UserInteraction::inputFile(){
 	size_t pos = 0;
 	std::string name, genre1, genre2;
 	int userPerm;
-	std::vector<int> friends;
+	std::vector<int> userAndFriends;
 	
 	
 	ifs.open("textFile.txt");
@@ -19,11 +19,9 @@ void UserInteraction::inputFile(){
 		std::cout<< "Couldn't find text file" << std::endl;
 		return;
 	}
-	//while (!ifs.eof()) { 
-		ifs >> userInfo;
-		//word[0] = tolower(word[0]);
-		//dataObject.insert(word);
-		//std::cout<<"userInfo: " <<userInfo<< std::endl;
+	while (!ifs.eof()) { 
+		std::getline(ifs, userInfo);
+
 		pos = userInfo.find(semicolon);
 		userPerm = std::stoi(userInfo.substr(0, pos));
 		userInfo.erase(0, pos + semicolon.length());
@@ -39,22 +37,29 @@ void UserInteraction::inputFile(){
 		pos = userInfo.find(semicolon);
 		genre2 = userInfo.substr(0, pos);
 		userInfo.erase(0, pos + semicolon.length());
-		int count =0;
 		
 		User newUser (userPerm, name, genre1, genre2);
-		std::cout << "newUser perm: "<< newUser.getPerm() << std::endl
+		/*std::cout << "newUser perm: "<< newUser.getPerm() << std::endl
 				<< "newUser name: "<< newUser.getName() << std::endl
 				<< "newUser g1: "<< newUser.getGenre1() << std::endl
 				<< "newUser g2: "<< newUser.getGenre2() << std::endl;
-				
+		*/	
+		userAndFriends.push_back(userPerm);	
+		int count =1;
 		while ((pos = userInfo.find(semicolon)) != std::string::npos) {
-			friends.push_back( std::stoi(userInfo.substr(0, pos)));
-			std::cout << "friends: " << friends[count] << std::endl;
+			userAndFriends.push_back( std::stoi(userInfo.substr(0, pos)));
 			userInfo.erase(0, pos + semicolon.length());
 			count++;
 		}
+		userAndFriends.push_back( std::stoi(userInfo));
 		
-		friends.push_back( std::stoi(userInfo));
-		std::cout << "friends: " << friends[count] << std::endl;
-	//}
+		//inserting in a graph and a tree		
+		int index = aGraph.insertInGraph(userAndFriends);
+		//aBTree.insertInBTree(newUser, index);
+		
+		
+		// will need to clean vector after each user!!!!
+		userAndFriends.clear();
+	}
+	aGraph.print();
 }
