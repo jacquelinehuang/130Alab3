@@ -33,7 +33,7 @@ private:
 
     int keys [MAXKEYS];  // An array of keys- Max number m-1 =3
     BtreeNode * children[M]; //array of pointers to its children. default to max size 4
-    BTreeNode * parent //lets try to make this?
+    BTreeNode * parent //parent pointer, not sure if this complicates things
     int count;     // counts number of children
     bool leaf; // Is true when node is leaf. Otherwise false
     

@@ -27,12 +27,19 @@ void Btree::insert(User u) //insert a new user. there are 3 cases to consider
 
 
 int Btree::split (BTreeNode *x, int i) 
-{return 1;
+{
+	//split, we have x is the floating node without a parent
+
+	//split current, the parent of would be x
+
+	return 1;
 //stub
 }
 
 //search for user given an int. 
-//return the node where we found user. else return null, in which case find is false 
+//return the node where we found user. 
+//if false ie, cannot find,return nullptr, 
+//will always update the node pointer "current" to hold the last internal node before the area we want 
 BTreeNode* Btree::search(int perm)
 { 
 	BTreeNode * x; //keeps track of current node  we're on
@@ -76,15 +83,15 @@ BTreeNode* Btree::search(int perm)
 
 	}
 
-if (x->e1->u1->getPerm()==perm || x ->e2->u1->getPerm()==perm )
-	return x; //means perm exists, return node where it exists
-else
-{
-	return NULL; //no node has what we want
-	current = x->parent;
-	//should probably make current point to x's parent so we know where to start to insert this node
-}
+	//x is now a leaf node where the int shoul be. 
+	current = x->parent; //the variable current now points to the node that is parent to where we want to find/insert the leaf 
+	if (x->e1->u1->getPerm()==perm || x ->e2->u1->getPerm()==perm )
+		return x; //return node where the perm exists
+	else
+		return nullptr; //the node at the correct spot doesn't have what we want. 
 
 }
+
+//for sanitycheck's sake but im not even sure this works 
 voidBtree:: traverse(BTreeNode *p)  {}
 
