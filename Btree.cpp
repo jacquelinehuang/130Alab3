@@ -3,22 +3,22 @@
 Btree::Btree(Entry *en1, Entry *en2)
 {
 	//tree constructor, make one new leaf/root node combo
-	root = new BtreeNode(e1, e2);
+	root = new BTreeNode(en1, en2);
 	current = root;
 	height =1;
 }
 
-void Btree::insert(User u) //insert a new user. there are 3 cases to consider
+void Btree::insert(User *u) //insert a new user. there are 3 cases to consider
 {
 	int p= u->getPerm();//easier way to search with userperm
 	
-	if (search (u)== false )
+	if (search (u)==nullptr )
 	{
 
 	}
 
 	//2 children or 3 children, find spot and insert
-	if (current ->leaf == true && count <4 )
+	if (current ->leaf == true && current->count <4 )
 	{
 
 	}
@@ -52,33 +52,33 @@ BTreeNode* Btree::search(int perm)
 		//current has 1 key, aka has M/2 =2 children
 		if (x->count ==2)
 		{
-			if (perm <  keys[0])
-				x = children [0]; //move to l child
+			if (perm < x->keys[0])
+				x = x->children [0]; //move to l child
 			if (perm >= keys [0])
-				x = children [1]; //move to r child
+				x = x->children [1]; //move to r child
 		}
 
 		//current has 2 keys, aka 3 children 
 		if (x->count ==3)
 		{
-			if (perm <  keys[0])
-				x = children [0]; //move to l child
-			if	(perm > keys[0] && perm < keys [1])
-				x = children [1]; //move to mid
+			if (perm < x-> keys[0])
+				x = x->children [0]; //move to l child
+			if	(perm >x-> keys[0] && perm < keys [1])
+				x = x->children [1]; //move to mid
 			if (perm >= keys [1])
-				x = children [2]; //move to r child
+				x = x->children [2]; //move to r child
 		}
 		//Current has 3 keys aka has M =4 children
 		if (current->count ==4)
 		{
-			if (perm <  keys[0])
-				x = children [0]; //move to l child
-			if	(perm > keys[0] && perm < keys [1])
-				x = children [1]; //move to lmid
-			if	(perm > keys[1] && perm < keys [2])
-				x = children [2]; //move to lmid
-			if (perm >= keys [2])
-				x = children [3]; //move to r child
+			if (perm < x-> keys[0])
+				x = x->children [0]; //move to l child
+			if	(perm > x->keys[0] && perm < keys [1])
+				x = x->children [1]; //move to lmid
+			if	(perm >x-> keys[1] && perm < keys [2])
+				x = x-> children [2]; //move to lmid
+			if (perm >=x-> keys [2])
+				x = x->children [3]; //move to r child
 		}
 
 	}

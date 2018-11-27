@@ -8,7 +8,7 @@ public:
 	const int M =4 ;;   // max number of children in a node
 	const int MINM = 2;    // min number of children in a node
 	const int MAXKEYS = 3; //max no of keys per node
-	const int L = 2  // max no of elements per leaf
+	const int L = 2;  // max no of elements per leaf
 
 
 	//node constructor, assuming for insert at leaf. 
@@ -32,8 +32,8 @@ public:
 private:
 
     int keys [MAXKEYS];  // An array of keys- Max number m-1 =3
-    BtreeNode * children[M]; //array of pointers to its children. default to max size 4
-    BTreeNode * parent //parent pointer, not sure if this complicates things
+    BTreeNode * children[M]; //array of pointers to its children. default to max size 4
+    BTreeNode * parent; //parent pointer, not sure if this complicates things
     int count;     // counts number of children
     bool leaf; // Is true when node is leaf. Otherwise false
     
@@ -46,19 +46,19 @@ friend class Btree;
 };
 
 
-Class Btree
+class Btree
 {
 
     private:
       BTreeNode* current; //node currently on
       BTreeNode* root; //root of btree
-      private int height; // height of tree
+      int height; // height of tree so far unnecessary so ?? we'll see
 
     public:
         
         //making a new tree, which gives a node that is a leaf 
-        BTree(Entry *en1, Entry *en2);
-        void insert(User u);
+        Btree(Entry *en1, Entry *en2);
+        void insert(User* u);
         int split (BTreeNode *x, int i);
         BTreeNode* search(int perm); //returns leaf node or NULL of where this perm exists 
         void traverse(BTreeNode *p); //traverse from root 
