@@ -12,7 +12,7 @@ void Btree::insert(User *u) //insert a new user. there are 3 cases to consider
 {
 	int p= u->getPerm();//easier way to search with userperm
 	
-	if (search (u)==nullptr )
+	if (search (p)==nullptr )
 	{
 
 	}
@@ -42,7 +42,8 @@ int Btree::split (BTreeNode *x, int i)
 //will always update the node pointer "current" to hold the last internal node before the area we want 
 BTreeNode* Btree::search(int perm)
 { 
-	BTreeNode * x; //keeps track of current node  we're on
+	BTreeNode * x; //keeps track of current node  we're on. Start with root
+	x=root;
 
 	//move until currrent becomes a leaf,
 	// move current to left, lmid, rmid or r child
@@ -54,7 +55,7 @@ BTreeNode* Btree::search(int perm)
 		{
 			if (perm < x->keys[0])
 				x = x->children [0]; //move to l child
-			if (perm >= keys [0])
+			if (perm >= x->keys [0])
 				x = x->children [1]; //move to r child
 		}
 
@@ -63,9 +64,9 @@ BTreeNode* Btree::search(int perm)
 		{
 			if (perm < x-> keys[0])
 				x = x->children [0]; //move to l child
-			if	(perm >x-> keys[0] && perm < keys [1])
+			if	(perm >x-> keys[0] && perm < x-> keys [1])
 				x = x->children [1]; //move to mid
-			if (perm >= keys [1])
+			if (perm >=  x-> keys [1])
 				x = x->children [2]; //move to r child
 		}
 		//Current has 3 keys aka has M =4 children
@@ -73,9 +74,9 @@ BTreeNode* Btree::search(int perm)
 		{
 			if (perm < x-> keys[0])
 				x = x->children [0]; //move to l child
-			if	(perm > x->keys[0] && perm < keys [1])
+			if	(perm > x->keys[0] && perm < x-> keys [1])
 				x = x->children [1]; //move to lmid
-			if	(perm >x-> keys[1] && perm < keys [2])
+			if	(perm >x-> keys[1] && perm < x-> keys [2])
 				x = x-> children [2]; //move to lmid
 			if (perm >=x-> keys [2])
 				x = x->children [3]; //move to r child
@@ -85,13 +86,12 @@ BTreeNode* Btree::search(int perm)
 
 	//x is now a leaf node where the int shoul be. 
 	current = x->parent; //the variable current now points to the node that is parent to where we want to find/insert the leaf 
-	if (x->e1->u1->getPerm()==perm || x ->e2->u1->getPerm()==perm )
+	if (x->e1->getuser() ->getPerm()==perm || x ->e2->getuser()->getPerm()==perm )
 		return x; //return node where the perm exists
 	else
-		return nullptr; //the node at the correct spot doesn't have what we want. 
-
+		return nullptr; //the leaf node at the correct spot doesn't have what we want. 
 }
 
 //for sanitycheck's sake but im not even sure this works 
-voidBtree:: traverse(BTreeNode *p)  {}
+void Btree:: traverse(BTreeNode *p)  {}
 

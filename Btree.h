@@ -5,10 +5,10 @@ class BTreeNode
 {
 
 public:
-	const int M =4 ;;   // max number of children in a node
-	const int MINM = 2;    // min number of children in a node
-	const int MAXKEYS = 3; //max no of keys per node
-	const int L = 2;  // max no of elements per leaf
+	const static int M =4 ;;   // max number of children in a node
+	const static int MINM = 2;    // min number of children in a node
+	const static int MAXKEYS = 3; //max no of keys per node
+	const static int L = 2;  // max no of elements per leaf
 
 
 	//node constructor, assuming for insert at leaf. 

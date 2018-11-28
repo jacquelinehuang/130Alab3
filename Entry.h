@@ -4,15 +4,15 @@
 //which holds users and their indexes 
 class Entry {
 private:
-	User *u1;
+	User *u;
 	int index1; 
 public: 
 	Entry (User* u, int i)
 	{
-		u1 = u;
+		this->u = u;
 		index1=i;
 	}
-	int getuserindex1 () {return index1;}
-	User * getuser1 () {return u1;}
+	int getuserindex() {return index1;}
+	User * getuser() {return u;}
 
 };
