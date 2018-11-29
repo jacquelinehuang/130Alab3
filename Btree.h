@@ -1,9 +1,21 @@
 #include "User.h"
 #include "Entry.h"
 // A BTree node
-class BTreeNode
+class BTreeLeaf
 {
+private:
 
+    int keys [MAXKEYS];  // An array of keys- Max number m-1 =3
+    BTreeNode * children[M]; //array of pointers to its children. default to max size 4
+    BTreeNode * parent; //parent pointer, not sure if this complicates things
+    int count;     // counts number of children
+    bool leaf; // Is true when node is leaf. Otherwise false
+    
+
+    Entry *e1;	//data if it is a leaf. 2 entries can be in a leaf max	
+    Entry *e2;
+
+	
 public:
 	const static int M =4 ;;   // max number of children in a node
 	const static int MINM = 2;    // min number of children in a node
@@ -29,22 +41,26 @@ public:
 		leaf = false;
 	}
 
-private:
-
-    int keys [MAXKEYS];  // An array of keys- Max number m-1 =3
-    BTreeNode * children[M]; //array of pointers to its children. default to max size 4
-    BTreeNode * parent; //parent pointer, not sure if this complicates things
-    int count;     // counts number of children
-    bool leaf; // Is true when node is leaf. Otherwise false
-    
-
-    Entry *e1;	//data if it is a leaf. 2 entries can be in a leaf max	
-    Entry *e2;
-
 // Friend so we can acess data as if it were a struct 
 friend class Btree;
 };
-
+class BTreeNode{
+	protected:
+		int perm [] = {-1,-1,-1};
+		
+		BTreeNode* lassThan1st;
+		BTreeNode* greaterThan1stAndLessThan2nd;
+		BTreeNode* greaterThan2ndAndLessThan3rd;
+		BTreeNode(int pr, BTreeNode* p, BTreeNode* n) 
+		{ perm = pr;
+		  prev = p;
+		  next = n;	}
+		void setPrev(BTreeNode* p) { prev = p; }
+		void setNext(BTreeNode* n) { next = n; }
+		
+		BTreeNode* getPrev(){ return prev; }
+		BTreeNode* getNext(){ return next; }
+};
 
 class Btree
 {
