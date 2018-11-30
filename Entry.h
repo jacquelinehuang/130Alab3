@@ -4,7 +4,7 @@
 //which holds users and their indexes 
 class Entry {
 private:
-	User* newUser;
+	User newUser;
 	int index1; 
 public: 
 	Entry ()

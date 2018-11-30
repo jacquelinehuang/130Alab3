@@ -1,5 +1,8 @@
 #include "Btree.h"
-
+Btree::Btree(){
+	numOfElms =0;
+	height = 0;
+}
 Btree::Btree(Entry *en1, Entry *en2)
 {
 	//tree constructor, make one new leaf/root node combo
@@ -8,10 +11,18 @@ Btree::Btree(Entry *en1, Entry *en2)
 	height =1;
 }
 
-void Btree::insert(User *u) //insert a new user. there are 3 cases to consider
-{
-	int p= u->getPerm();//easier way to search with userperm
+void Btree::insert(User u, int index) //insert a new user. there are 3 cases to consider
+{	Entry* e = new Entry (u, index);
+	int p= u.getPerm();//easier way to search with userperm
 	
+	if (numOfElms == 0){
+		BTreeNode* newNode;
+		BTreeNode* newLeaf(e);
+		root = newNode;
+		newNode->keys[0] = p;
+		newNode->children[1] = newLeaf;
+		numOfElms++;
+	}
 	if (search (p)==nullptr )
 	{
 

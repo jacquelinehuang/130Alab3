@@ -1,29 +1,62 @@
 
-//we need template because the node can points to a next node or to a leaf
-template<class T>
-class BTreeNode{
-	protected:
-		int perms [] = {-1,-1,-1};
+
+class BTreeNode
+{
+protected:
+
+    int keys [MAXKEYS];  // An array of keys- Max number m-1 =3
+    BTreeNode * children[M]; //array of pointers to its children. default to max size 4
+    BTreeNode * parent; //parent pointer, not sure if this complicates things
+    int countPtr;     // counts number of children
+	int  countEntries;
+    bool leaf; // Is true when node is leaf. Otherwise false
+    
+
+    Entry *e1;	//data if it is a leaf. 2 entries can be in a leaf max	
+    Entry *e2;
+
+	
+public:
+	const static int M =4 ;;   // max number of children in a node
+	const static int MINM = 2;    // min number of children in a node
+	const static int MAXKEYS = 3; //max no of keys per node
+	const static int L = 2;  // max no of elements per leaf
+
+	int numOfEntriesInLeaf(){
+		return countEntries;
+	}
+	BTreeNode (Entry *en1){
+		leaf= true;
+		e1= en1;
+		countEntries++;
+	}
+	//node constructor, assuming for insert at leaf. 
+	BTreeNode (Entry *en1, Entry *en2)
+	{
+		//initialize as leaf with data
+		leaf= true;
+		e1= en1;
+		e2= en2;
+		//keys used and children it has default to 0
+		countPtr = 0;
+	}
+
+	//Will use setters to fix for nodes created by splitting. 
+	//default constructor for internal nodes  
+	BTreeNode ()
+	{
+		leaf = false;
+		countPtr = 0;
+		countEntries = 0;
 		
-		T* lassThan1st;
-		BTreeNode* greaterThan1stAndLessThan2nd;
-		BTreeNode* greaterThan2ndAndLessThan3rd;
-		BTreeNode* greaterThan3rd;
+		keys[MAXKEYS] = {-1,-1,-1}
 		
-		BTreeNode() 
-		{ 	lassThan1st = NULL;
-			greaterThan1stAndLessThan2nd = NULL;
-			greaterThan2ndAndLessThan3rd = NULL;
-			greaterThan3rd = NULL;
-		}
-		void setLassThan1st(BTreeNode* lt1) { lassThan1st = lt1; }
-		void setGreaterThan1stAndLessThan2nd(BTreeNode* gt1lt2) { greaterThan1stAndLessThan2nd = gt1lt2; }
-		void setGreaterThan2ndAndLessThan3rd(BTreeNode* gt2lt3) { greaterThan2ndAndLessThan3rd = gt2lt3; }
-		void setGreaterThan3rd(BTreeNode* gt3) { greaterThan3rd = gt3; }
+		for (int i=0; i<M; i++)
+			children[i] = NULL;
 		
-		void set1stNum (int num1) { perms[0] = num1; }
-		void set2ndNum (int num2) { perms[1] = num2; }
-		void set3rdNum (int num3) { perms[2] = num3; }
-		//BTreeNode* getPrev(){ return prev; }
-		//BTreeNode* getNext(){ return next; }
+	}
+
+// Friend so we can acess data as if it were a struct 
+friend class Btree;
 };
+#endif
