@@ -14,7 +14,7 @@ Btree::Btree(Entry *en1, Entry *en2)
 void Btree::insert(User u, int index) //insert a new user. there are 3 cases to consider
 {	Entry* e = new Entry (u, index);
 	int p= u.getPerm();//easier way to search with userperm
-	
+
 	if (numOfElms == 0){
 		BTreeNode* newNode;
 		BTreeNode* newLeaf(e);
@@ -37,7 +37,7 @@ void Btree::insert(User u, int index) //insert a new user. there are 3 cases to 
 }
 
 
-int Btree::split (BTreeNode *x, int i) 
+int Btree::split (BTreeNode *x, int i)
 {
 	//split, we have x is the floating node without a parent
 
@@ -47,20 +47,22 @@ int Btree::split (BTreeNode *x, int i)
 //stub
 }
 
-//search for user given an int. 
-//return the node where we found user. 
-//if false ie, cannot find,return nullptr, 
-//will always update the node pointer "current" to hold the last internal node before the area we want 
+//search for user given an int.
+//return the node where we found user.
+//if false ie, cannot find,return nullptr,
+//will always update the node pointer "current" to hold the last internal node before the area we want
 BTreeNode* Btree::search(int perm)
-{ 
+{
 	BTreeNode * x; //keeps track of current node  we're on. Start with root
 	x=root;
 
 	//move until currrent becomes a leaf,
 	// move current to left, lmid, rmid or r child
-	while (x->leaf == false && x!=NULL)
+	while (x->leaf == false)
 	{
-		//3 cases. 
+		int i =1;
+		
+		//3 cases.
 		//current has 1 key, aka has M/2 =2 children
 		if (x->count ==2)
 		{
@@ -70,7 +72,7 @@ BTreeNode* Btree::search(int perm)
 				x = x->children [1]; //move to r child
 		}
 
-		//current has 2 keys, aka 3 children 
+		//current has 2 keys, aka 3 children
 		if (x->count ==3)
 		{
 			if (perm < x-> keys[0])
@@ -95,14 +97,13 @@ BTreeNode* Btree::search(int perm)
 
 	}
 
-	//x is now a leaf node where the int shoul be. 
-	current = x->parent; //the variable current now points to the node that is parent to where we want to find/insert the leaf 
+	//x is now a leaf node where the int shoul be.
+	current = x->parent; //the variable current now points to the node that is parent to where we want to find/insert the leaf
 	if (x->e1->getuser() ->getPerm()==perm || x ->e2->getuser()->getPerm()==perm )
 		return x; //return node where the perm exists
 	else
-		return nullptr; //the leaf node at the correct spot doesn't have what we want. 
+		return nullptr; //the leaf node at the correct spot doesn't have what we want.
 }
 
-//for sanitycheck's sake but im not even sure this works 
+//for sanitycheck's sake but im not even sure this works
 void Btree:: traverse(BTreeNode *p)  {}
-

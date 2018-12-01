@@ -1,12 +1,12 @@
 #include "User.h"
 
 //a small header file for the data structure entries,
-//which holds users and their indexes 
+//which holds users and their indexes
 class Entry {
 private:
 	User newUser;
-	int index1; 
-public: 
+	int index1;
+public:
 	Entry ()
 	{
 		newUser = new User();
@@ -17,7 +17,25 @@ public:
 		newUser = u;
 		index1=i;
 	}
+
 	int getuserindex() {return index1;}
 	User getuser() {return newUser;}
+
+	//overload ops <, >, <= and >=
+	Entry operator<(const Entry& b) {
+	return (this->newUser.getPerm() < b->newUser.getPerm();)
+}
+
+	Entry operator>(const Entry& b) {
+	return (this->newUser.getPerm() > b->newUser.getPerm();)
+}
+
+Entry operator<=(const Entry& b) {
+return (this->newUser.getPerm() <= b->newUser.getPerm();)
+}
+
+Entry operator=>(const Entry& b) {
+return (this->newUser.getPerm() => b->newUser.getPerm();)
+}
 
 };
