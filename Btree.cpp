@@ -46,63 +46,46 @@ int Btree::split (BTreeNode *x, int i)
 	return 1;
 //stub
 }
-
+Entry Btree::searchInBtree(int perm){
+	return search(int perm,root);
+}
+bool Btree::isFound(int perm){
+	Entry anEntry = searchHelper(perm);
+	if (anEntry.getuserindex().getPerm() == -1 | anEntry.getuserindex().getPerm() == -2)
+		return false;
+	else
+		return true;
+}
 //search for user given an int. 
 //return the node where we found user. 
 //if false ie, cannot find,return nullptr, 
 //will always update the node pointer "current" to hold the last internal node before the area we want 
-BTreeNode* Btree::search(int perm)
+Entry Btree::searchHelper(int perm, BTreeNode* root)
 { 
-	BTreeNode * x; //keeps track of current node  we're on. Start with root
-	x=root;
-
-	//move until currrent becomes a leaf,
-	// move current to left, lmid, rmid or r child
-	while (x->leaf == false && x!=NULL)
-	{
-		//3 cases. 
-		//current has 1 key, aka has M/2 =2 children
-		if (x->count ==2)
-		{
-			if (perm < x->keys[0])
-				x = x->children [0]; //move to l child
-			if (perm >= x->keys [0])
-				x = x->children [1]; //move to r child
+	if (root!=NULL){
+		if (!root->leaf){
+			if(perm < root->keys[0]){ //perm less then keys[0] 
+				searchHelper(perm, children[0]);
+			}else if (countkeys==1 | (keys[1]!=-1 && perm < keys[1])){ //perm between keys[0] and keys[1] or when only one key
+				searchHelper(perm, children[1]);
+			}else if (countkeys==2 | (keys[2]!=-1 && perm < keys[2])){ //perm between keys[1] and keys[2] or when only two keys
+				searchHelper(perm, children[2]);
+			}else { // countkeys==3 and perm is greater then keys[3]
+				searchHelper(perm, children[3]);
+			}	
+		}else{
+			if (root->e1.getuserindex().getPerm() == perm)
+				return e1;
+			else if (root->e2.getuserindex().getPerm() == perm)
+				return e2;
+			else{
+				Enrtry defEntry;
+				return defEntry;//INFO for debugging: getPerm will returm -1, so it means the search is unsuccessful
+			}		
 		}
-
-		//current has 2 keys, aka 3 children 
-		if (x->count ==3)
-		{
-			if (perm < x-> keys[0])
-				x = x->children [0]; //move to l child
-			if	(perm >x-> keys[0] && perm < x-> keys [1])
-				x = x->children [1]; //move to mid
-			if (perm >=  x-> keys [1])
-				x = x->children [2]; //move to r child
-		}
-		//Current has 3 keys aka has M =4 children
-		if (current->count ==4)
-		{
-			if (perm < x-> keys[0])
-				x = x->children [0]; //move to l child
-			if	(perm > x->keys[0] && perm < x-> keys [1])
-				x = x->children [1]; //move to lmid
-			if	(perm >x-> keys[1] && perm < x-> keys [2])
-				x = x-> children [2]; //move to lmid
-			if (perm >=x-> keys [2])
-				x = x->children [3]; //move to r child
-		}
-
-	}
-
-	//x is now a leaf node where the int shoul be. 
-	current = x->parent; //the variable current now points to the node that is parent to where we want to find/insert the leaf 
-	if (x->e1->getuser() ->getPerm()==perm || x ->e2->getuser()->getPerm()==perm )
-		return x; //return node where the perm exists
-	else
-		return nullptr; //the leaf node at the correct spot doesn't have what we want. 
+	}else{
+		Enrtry defEntry;
+		defEntry.setPerm(-2);//INFO for debugging: getPerm will returm -2
+		return defEntry;
+	}	
 }
-
-//for sanitycheck's sake but im not even sure this works 
-void Btree:: traverse(BTreeNode *p)  {}
-
