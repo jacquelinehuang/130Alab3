@@ -8,7 +8,7 @@ class UserInteraction
     private:
 		void addUsertoBTree (User u);
 		Graph aGraph;
-		//BTree aBTree;
+		//BTree* aBTree;
     public:
 		void inputFile();
 		void add (User u);

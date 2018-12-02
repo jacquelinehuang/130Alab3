@@ -1,17 +1,17 @@
 #ifndef _GRAPH
 #define _GRAPH
 #include <vector>
-
+#include <stack> 
 class Graph
 {
  private:
     std::vector<std::vector <int>> alist;
-
+	bool isFriend(int userIndex, int potentialFriendPerm);
+	int  find (int perm);
    public:
-    //Graph ();
     int insertInGraph(std::vector<int> userAndFriends);
 	void print();
-    void DFS ();
+    void DFS (int perm, BTree* aBTree);
 
 };
 
