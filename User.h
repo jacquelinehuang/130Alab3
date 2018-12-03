@@ -14,7 +14,17 @@ class User{
 			name = n;
 			genre1=g1;
 			genre2=g2;
+		
 		}
+
+		//default construct
+		User ()
+		{
+			perm=-1;
+			name="";
+			genre1="";
+			genre2="";
+		}	
 		
 		// getters
 		int getPerm (){return perm;}

@@ -1,6 +1,6 @@
 #include "Btree.h"
-#include "Entree.h"
 #include <iostream>
+#include <algorithm>    // std::max
 
 Btree::Btree(){
 	root = new BTreeNode(); //root is some blank node, which we will replace once we insert more data
@@ -9,93 +9,113 @@ Btree::Btree(){
 
 
 //insert
-/*
- search to determine what bucket the new record should go into.
-    If the bucket is not full (at most b − 1 {\displaystyle b-1} b-1 entries after the insertion), add the record.
-    Otherwise, before inserting the new record
-        split the bucket.
-            original node has ⎡(L+1)/2⎤ items
-            new node has ⎣(L+1)/2⎦ items
-        Move ⎡(L+1)/2⎤-th key to the parent, and insert the new node to the parent.
-
-Repeat until a parent is found that need not split.
-If the root splits, treat it as if it has an empty parent and split as outline above.
-*/
 //method that tries to insert an entry. Calls the actual insert and split functions
-bool Btree:: abletoadd(int item)
+bool Btree:: insert(Entry item)
 {
-	//when Btrees are created, we initialize an empty root. We start adding entries from there
-
-	//if we search and cannot find the item, then we can insert it.
-	//in int case search returns anegative number. otherwise it would be anullptr
-	if (search(item, root)<0)
+	//current is a leafnode, found as a byproduct of using search. 
+	Entry foundentry =search(item.getperm());
+	//if we search and cannot find the item, aka negative perm, then we can proceed to inserting
+	if (foundentry.getperm()<0)
 	{
-		//the pointer, <current> is pointing at the leaf node where we should insert.
-		//if current's parent has less than 3 keys, a.k.a. we don't need to worry about splitting nodes, only leaves
-		if(current ->-parent->countkeys < 3)
-	     {
-		//if leaf is  not full, aka has 1 or 2 entries, insert properly
-	        if(current->countEntries<0){
-
-
-//FML IT"S WRONG FROM HERE
-	          current ->insertInLeaf(0, item);
-	          return true;
-	        }else{ //leaf where we want to insert is full but node is not, we must create a new leaf or adjust keys and place the number in the next leaf with a spot
-	            current->splitleaf(0, item);
-	        }
-	      }
-	//case that node is full. We have 2 cases, leaves are full, in which case we split node or leaves or not full in which we just rearrange leaves
-	else
-	{
-		bool allleavesarefull = true;
-		//check if all leaves are full
-		for (int i=0;i<4;i++)
+		
+		//then check if leaf is full or not. 
+		//.1) If not, then add item to leaf. 
+		if (current->countEntries<2)
 		{
-			//see if we have one open spot left fpr entries in any leaf.
-			BTreeNode* kid = current ->children[i];
-			if (kid->countEntries < 2)
+			//add item to leaf. 
+			for (int n=0; n<2; n++)
 			{
-				allleavesarefull=false;
-				break;
+				//this takes care of if it will be in spot 1 or spot 2. Entries with -1 are considered empty
+				// insert at first open spot
+				if (current->entries[n].getperm()==-1)
+				{
+					current->entries[n]=item;
+					break;
+				}
 			}
-
+			current->countEntries++;
+			//swap to keep largest entry at entries[1] for simplicity's sake
+ 			if (current->entries[0].getperm()>current->entries[1].getperm()) //comparison with getperm which calls users getperm
+			{
+				Entry temp = current->entries[0];
+				current->entries[0]=current->entries[1];
+				current->entries[1]=temp;
+  			}
 		}
 
-		if (allleavesarefull)
-		{
-			//call split node on current node and make a new node STUB
-			current->splitleaf(0)
-			splitnode(current, item);
-
-		}
-		//not all leaves are full, proceed as usual
+		//2) If full, then you must split the leaf. 
 		else{
-			if(current->leafIsNotFull(0)){
-	          current ->insertInLeaf(0, item);
-	          return true;
-	        }else{ //leaf where we want to insert is full but node is not, we must create a new leaf or adjust keys and place the number in the next leaf with a spot
-	            current->splitleaf(0, item);
-	        }
+			//splitleaf code. basically copy out some of the code into leaf2
+			BTreeNode leaf2;
+			leaf2= new BTreeNode(current->parent); //leaf2 is a new node that we want to point to current's parent. we'll check if parent node is full later
+
+
+
+
+
+			/*Leaf splits into two parts. Now you must check if parents can take in another part. 
+			1) If parent had 3 or less children initially, it can take a new leaf so it adds it. 
+			procedures: split, adjust parents keys and numofchildren, attatch the two new leaves as children. do another search 
+			
+			2)If not, then parent node will split. If parent node splits, it must check it’s parent as well and this will happen recursively until root.
+			step 1 except you have to split the node itself too*/
+
+			//separate func for splitnode - a recursive function
 		}
-
 	}
 
-	return true;
-	}
-
-	//else number exists, we cannot insert
-	else
-		return false;
-
-
-
-
-
+	//else number exists, we don't insert
+	return false;
 }
 
+/*
+  //if we need to put more entries into current's leaf nodes
+  void insertInLeaf(Entry i)
+  {
+    //if current's is empty, aka create a new node
+    if(children[childIndex] == NULL)
+    {
+      //make a totally new node that has e1=i
+      BTreeNode * child = new BTreeNode(i); //initializing a new node puts entrycount to 1
+      children[childIndex]=child;
+      child->parent = this;////SOURCE FOR ERRORS MAYBE??
+    }
+    //if there is already a leaf node at this child
+    else
+    {
+      //if there is only 1 entry
+      if (children[childIndex]->countEntries ==1)       //that means only e1 is pointing to an entry. e2 is open so it will hold the new entry i
+      {
+      e2 =i;
+      leafisfull=true;
+      //check to make sure e2 still holds largest element
+      if (e1>e2) {swapEntries();}
+      children[childIndex]->countEntries ++;}
+    }
+  }
 
-void Btree:: splitnode(BTreeNode* x, int i)
+  void splitleaf(int keyIndex, int item){
+    //the leaf has overflowed. Lets split it.
+    //First lets adjust the keys. Find max btwn the newly inserted element and e2, the current largest elem in the leaf
+    int maxNum = std::max(children[keyIndex]->e2, item);
+    //replace keyindex with the new key
+    keys[keyIndex] = maxNum;
+    //if the largest number is e2, then we'll take out e2. Item is now e2, and e2 will move to another leaf
+    if(maxNum == children[keyIndex]->e2) {
+      insertInLeaf(keyIndex,item);
+    }
+    //else the largest element is the item we want to inserted
+    //either way we have a floating data entry, maxnum. We want to insert maxNum to the next leaf spot
+
+    //try to insert maxnum into the next spot. If it can fit
+    if (children [keyIndex+1]->countEntries==0|| children [keyIndex+1]->countEntries==1)
+      insertInLeaf(keyIndex+1, maxNum);
+    else
+      splitleaf(keyIndex+1, maxNum);
+  }
+*/
+
+void Btree:: splitnode(BTreeNode* x, Entry item)
 {
 	/*
 	//x is a full node with full leaves.
@@ -135,13 +155,7 @@ void Btree:: splitnode(BTreeNode* x, int i)
 }
 
 
-//search for user given an int.
-//return the node where we found user.
-//if false ie, cannot find,return nullptr,
-//will always update the node pointer "current" to hold the last internal node before the area we want
-Entry Btree::search(int perm){
-	return searchHelper(int perm,root);
-}
+
 Entry Btree::searchHelper(int perm, BTreeNode* x)
 {
 	//x keeps track of current node  we're on. Start with root
@@ -151,28 +165,32 @@ Entry Btree::searchHelper(int perm, BTreeNode* x)
 		{
 			//x is now a leaf node where the int shoul be.
 			current = x; //the variable current now points to the node that we should insert at
-			if (x->e1->user.getPerm()== perm)
-				return x->e1;
-			else if (x->e2->user.getPerm() == perm)
-				return x->e2;
+			if (x->entries[0].getperm()== perm)
+				return x->entries[0];
+			else if (x->entries[1].getperm() == perm)
+				return x->entries[1];
 			else
-				return nullptr;
-				//any negative number means search is false
+				return Entry();
 		}
 		//if x is not a leaf...
 		else{
 			if(perm <=x->keys[0]){ //perm less then keys[0]
-				search(perm, x->children[0]);
-			}else if (x->countkeys==1 | (x->keys[1]!=-1 && perm <= x->keys[1])){ //perm between keys[0] and keys[1] or when only one key
-				search(perm, x->children[1]);
-			}else if (x->countkeys==2 | (x->keys[2]!=-1 && perm <=x->keys[2])){ //perm between keys[1] and keys[2] or when only two keys
-				search(perm, x->children[2]);
+				searchHelper(perm, x->children[0]);
+			}else if ((x->keys[1]!=-1 && perm <= x->keys[1])){ //perm between keys[0] and keys[1] or when only one key
+				searchHelper(perm, x->children[1]);
+			}else if ((x->keys[2]!=-1 && perm <=x->keys[2])){ //perm between keys[1] and keys[2] or when only two keys
+				searchHelper(perm, x->children[2]);
 			}else { // countkeys==3 and perm is greater then keys[3]
-				search(perm, x->children[3]);
+				searchHelper(perm, x->children[3]);
 			}
 		}
 	}
 }
+//search for user given an int and return the entry that holds it. else return a mock entry with perm =-1
+Entry Btree::search(int perm){
+	return searchHelper(perm, root);
+}
+
 
 //for sanitycheck's sake but im not even sure this works
 void Btree:: traverse(BTreeNode *p)  {}

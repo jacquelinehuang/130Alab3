@@ -2,6 +2,7 @@
 
 //a small header file for the data structure entries,
 //which holds users and their indexes
+
 class Entry {
 private:
 	User user;
@@ -10,9 +11,10 @@ private:
 public:
 	Entry ()
 	{
-		user = new User();
+		user = User(); //default user with perm =-1
 		index1=-1;
 	}
+
 	Entry (User u, int i)
 	{
 		user = u;
@@ -21,23 +23,7 @@ public:
 	int getuserindex() {return index1;}
 	User getuser() {return user;}
 	void setuserindex(int graphpos) {index1=graphpos;}
-
-	//overload ops <, >, <= and >= and ==
-
-	Entry operator<(const Entry& b) {
-	return (this->user.getPerm() < b->user.getPerm();)
-}
-
-	Entry operator>(const Entry& b) {
-	return (this->user.getPerm() > b->user.getPerm();)
-}
-
-Entry operator<=(const Entry& b) {
-return (this->user.getPerm() <= b->user.getPerm();)
-}
-
-Entry operator=>(const Entry& b) {
-return (this->user.getPerm() => b->user.getPerm();)
-}
+//for sanity's sake
+	int getperm() {return user.getPerm();}
 
 };
