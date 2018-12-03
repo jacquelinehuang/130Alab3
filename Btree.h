@@ -16,10 +16,10 @@ class Btree
         Btree();
         //making a new tree, which gives a node that is a leaf
         Btree(Entry *en1, Entry *en2);
+		BTreeNode* getRoot();
         void insert(User u, int index);
         void split (BTreeNode *x, int i);
-        BTreeNode* search(int perm); //returns leaf node or NULL of where this perm exists
-        void traverse(BTreeNode *p); //traverse from root
-
-
+		Entry searchInBtree(int perm);
+        Entry searchHelper(int perm, BTreeNode* root); //returns leaf node or NULL of where this perm exists
+		bool isFound(int perm);
 };

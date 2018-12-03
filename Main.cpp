@@ -27,7 +27,19 @@ int main(){
 			}
 		if (oper == 1){
 			userInter.inputFile();
-		}	
+		} else if (oper ==5){
+			int perm;
+			cout << "Enter perm number: ";
+			while(!(cin>>perm)) {
+				cin.clear();
+				cin.ignore(999,'\n');
+				cout <<endl <<"Invalid data type! Enter NUMBER. Try again"<< endl;
+				cout << "Enter perm number: ";
+			}
+			userInter.reccomendfriends(perm);
+		}else{
+			cout<< "Invalid input. Try again"<<endl;
+		}
 		cout << endl << "Do you want to continue again? (y/n): ";
 		cin >> answer;
 	}while (answer == 'y');
