@@ -11,16 +11,15 @@ class Btree
 	  int numOfElms;
 
     public:
-        Btree();
-        //making a new tree, which gives a root that is a default node with keys set to -1
-
+      Btree();
+      //making a new tree, which gives a root that is a default node with keys set to -1
       //  void insert(User u, int index);
 
       bool abletoadd(int item);
-      void split (int keyindex, int item);
+      void splitnode(int keyindex, int item);
 
-        BTreeNode* search(int perm); //returns leaf node or NULL of where this perm exists
-        void traverse(BTreeNode *p); //traverse from root
+      int search(int perm, BTreeNode* x); //returns leaf node or NULL of where this perm exists
+      void traverse(BTreeNode *p); //traverse from root
 
 
 };

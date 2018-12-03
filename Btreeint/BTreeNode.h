@@ -11,8 +11,9 @@ private:
     int  countEntries; //counts how many entries in a leaf
     bool leaf; // Is true when node is leaf. Otherwise false
 
-    int e1;//  always smaller number
-    int e2; //entry 2, larger number
+    bool leafisfull;
+    int e1=-1;//  always smaller number
+    int e2=-1; //entry 2, larger number
 
 public:
 	//node constructor, assuming for insert at leaf.
@@ -23,6 +24,7 @@ public:
     e1= i;
     countEntries=1;
     parent =NULL;
+    leafisfull=false;
   }
   //other constructor for  internal nodes
   BTreeNode ()
@@ -34,6 +36,7 @@ public:
     for (int i=0; i<3; i++) {keys [i]=-1;}
     for (int i=0; i<4; i++)
       children[i] = NULL;
+
   }
 
   //check that the leaf at this index child index can still hold more entries
@@ -65,6 +68,7 @@ public:
       if (children[childIndex]->countEntries ==1)       //that means only e1 is pointing to an entry. e2 is open so it will hold the new entry i
       {
       e2 =i;
+      leafisfull=true;
       //check to make sure e2 still holds largest element
       if (e1>e2) {swapEntries();}
       children[childIndex]->countEntries ++;}
