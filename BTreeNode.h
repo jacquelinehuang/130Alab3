@@ -1,52 +1,98 @@
+#include <algorithm>
+#include "Entry.h"
 
 class BTreeNode
 {
-protected:
+private:
 
-    int keys [MAXKEYS];  // An array of keys- Max number m-1 =3
-    BTreeNode * children[M]; //array of pointers to its children. default to max size 4
-    BTreeNode * parent; //parent pointer, not sure if this complicates things
-    int countPtr;     // counts number of children
+    int keys [3];  // An array of keys- Max number m-1 =3
+    BTreeNode * children[4]; //array of pointers to its children. default to max size 4
+    BTreeNode * parent; //parent pointer,
+    int countkeys;     // counts number of keys
     int  countEntries; //counts how many entries in a leaf
+    int countchildren //counts how many children this node has
     bool leaf; // Is true when node is leaf. Otherwise false
 
-
-    Entry *e1;	//data if it is a leaf. 2 entries can be in a leaf max
-    Entry *e2;
-
+    Entry e1;//  always smaller number
+    Entry e2; //entry 2, larger number
 
 public:
-	const static int M =4 ;;   // max number of children in a node
-	const static int MINM = 2;    // min number of children in a node
-	const static int MAXKEYS = 3; //max no of keys per node
-	const static int L = 2;  // max no of elements per leaf
-
-	int numOfEntriesInLeaf(){
-		return countEntries;
-	}
-
 	//node constructor, assuming for insert at leaf.
-	BTreeNode (Entry *en1){
-		leaf= true;
-		e1= en1;
-		countEntries=1;
-	}
 
+  //make a new leaf constructor
+  BTreeNode (Entry i1){
+    leaf= true;
+    e1= i1;
+    countEntries=1;
+    parent =NULL;
+  }
 
-	//Will use setters to fix for nodes created by splitting.
-	//default constructor for internal nodes
-	BTreeNode ()
-	{
-		leaf = false;
-		countPtr = 0;
-		countEntries = 0;
+  //other constructor for  internal nodes
+  BTreeNode ()
+  {
+    leaf = false;
+    countkeys = 0;
+    countEntries = 0;
+    parent =NULL;
+    for (int i=0; i<3; i++) {keys [i]=-1;}
+    for (int i=0; i<4; i++)
+      children[i] = NULL;
 
-		keys[MAXKEYS] = {-1,-1,-1}
+  }
 
-		for (int i=0; i<M; i++)
-			children[i] = NULL;
+  //swap to keep largest entry at e2
+  void swapEntries(){
+    Entry temp = e1;
+    e1=e2;
+    e2=temp;
+  }
 
-	}
+/*
+  //if we need to put more entries into current's leaf nodes
+  void insertInLeaf(Entry i)
+  {
+    //if current's is empty, aka create a new node
+    if(children[childIndex] == NULL)
+    {
+      //make a totally new node that has e1=i
+      BTreeNode * child = new BTreeNode(i); //initializing a new node puts entrycount to 1
+      children[childIndex]=child;
+      child->parent = this;////SOURCE FOR ERRORS MAYBE??
+    }
+    //if there is already a leaf node at this child
+    else
+    {
+      //if there is only 1 entry
+      if (children[childIndex]->countEntries ==1)       //that means only e1 is pointing to an entry. e2 is open so it will hold the new entry i
+      {
+      e2 =i;
+      leafisfull=true;
+      //check to make sure e2 still holds largest element
+      if (e1>e2) {swapEntries();}
+      children[childIndex]->countEntries ++;}
+    }
+  }
+
+  void splitleaf(int keyIndex, int item){
+    //the leaf has overflowed. Lets split it.
+    //First lets adjust the keys. Find max btwn the newly inserted element and e2, the current largest elem in the leaf
+    int maxNum = std::max(children[keyIndex]->e2, item);
+    //replace keyindex with the new key
+    keys[keyIndex] = maxNum;
+    //if the largest number is e2, then we'll take out e2. Item is now e2, and e2 will move to another leaf
+    if(maxNum == children[keyIndex]->e2) {
+      insertInLeaf(keyIndex,item);
+    }
+    //else the largest element is the item we want to inserted
+    //either way we have a floating data entry, maxnum. We want to insert maxNum to the next leaf spot
+
+    //try to insert maxnum into the next spot. If it can fit
+    if (children [keyIndex+1]->countEntries==0|| children [keyIndex+1]->countEntries==1)
+      insertInLeaf(keyIndex+1, maxNum);
+    else
+      splitleaf(keyIndex+1, maxNum);
+  }
+*/
 
 // Friend so we can acess data as if it were a struct
 friend class Btree;

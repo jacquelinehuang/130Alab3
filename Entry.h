@@ -4,38 +4,40 @@
 //which holds users and their indexes
 class Entry {
 private:
-	User newUser;
+	User user;
 	int index1;
+
 public:
 	Entry ()
 	{
-		newUser = new User();
+		user = new User();
 		index1=-1;
 	}
 	Entry (User u, int i)
 	{
-		newUser = u;
+		user = u;
 		index1=i;
 	}
-
 	int getuserindex() {return index1;}
-	User getuser() {return newUser;}
+	User getuser() {return user;}
+	void setuserindex(int graphpos) {index1=graphpos;}
 
-	//overload ops <, >, <= and >=
+	//overload ops <, >, <= and >= and ==
+
 	Entry operator<(const Entry& b) {
-	return (this->newUser.getPerm() < b->newUser.getPerm();)
+	return (this->user.getPerm() < b->user.getPerm();)
 }
 
 	Entry operator>(const Entry& b) {
-	return (this->newUser.getPerm() > b->newUser.getPerm();)
+	return (this->user.getPerm() > b->user.getPerm();)
 }
 
 Entry operator<=(const Entry& b) {
-return (this->newUser.getPerm() <= b->newUser.getPerm();)
+return (this->user.getPerm() <= b->user.getPerm();)
 }
 
 Entry operator=>(const Entry& b) {
-return (this->newUser.getPerm() => b->newUser.getPerm();)
+return (this->user.getPerm() => b->user.getPerm();)
 }
 
 };

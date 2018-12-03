@@ -10,21 +10,24 @@ Btree::Btree(){
 
 
 
-//method that checks if we can insert without issue. Calls the actual insert and split functions
+//method that tries to insert an entry. Calls the actual insert and split functions
 bool Btree:: abletoadd(int item)
 {
-	  //when Btrees are created, we initialize an empty root. We start adding entries from there
+	//when Btrees are created, we initialize an empty root. We start adding entries from there
 
 	//if we search and cannot find the item, then we can insert it. 
 	//in int case search returns anegative number. otherwise it would be anullptr
 	if (search(item, root)<0)
 	{
-		//the pointer, <current> is pointing at the parent where the entry should be inserted.
-		//if current has less than 3 keys, a.k.a. we don't need to worry about splitting nodes, only leaves
-	if(current ->countkeys < 3)  
+		//the pointer, <current> is pointing at the leaf node where we should insert.
+		//if current's parent has less than 3 keys, a.k.a. we don't need to worry about splitting nodes, only leaves
+		if(current ->-parent->countkeys < 3)  
 	     {
 		//if leaf is  not full, aka has 1 or 2 entries, insert properly
-	        if(current->leafIsNotFull(0)){
+	        if(current->countEntries<0){
+
+
+//FML IT"S WRONG FROM HERE  	
 	          current ->insertInLeaf(0, item);
 	          return true;
 	        }else{ //leaf where we want to insert is full but node is not, we must create a new leaf or adjust keys and place the number in the next leaf with a spot
@@ -35,11 +38,12 @@ bool Btree:: abletoadd(int item)
 	else
 	{
 		bool allleavesarefull = true;
+		//check if all leaves are full
 		for (int i=0;i<4;i++)
 		{
-			//see if we have one open spot left in any leaf. 
+			//see if we have one open spot left fpr entries in any leaf. 
 			BTreeNode* kid = current ->children[i];
-			if (kid->leafisfull == false)
+			if (kid->countEntries < 2)
 			{
 				allleavesarefull=false;
 				break;
@@ -49,8 +53,9 @@ bool Btree:: abletoadd(int item)
 
 		if (allleavesarefull)
 		{
-			//call split nodes and make a new node STUB
-			splitnode(0, item);
+			//call split node on current node and make a new node STUB
+			current->splitleaf(0)
+			splitnode(current, item);
 
 		}
 		//not all leaves are full, proceed as usual
@@ -74,8 +79,43 @@ bool Btree:: abletoadd(int item)
 
 }
 
-void Btree:: splitnode(int keyindex, int item)
-{}
+void Btree:: splitnode(BTreeNode* x, int i)
+{
+	//x is a full node with full leaves.
+	BTreeNode *node1, *node2;
+	//new internal nodes
+	node1 = new BTreeNode ();
+	node2 = new BTreeNode ();
+
+	//copy data to internal nodes
+	for (int j=0, j<2, j++)
+	{
+		//copy keys 0, 1 to node 1
+		node1->keys [i] = x->keys [i];
+		// copy children 0, 1 to node 1
+		node1->children[i]=x-keys[i];
+	}
+
+	//copy data after the mid split 
+	node->keys[0]=x->keys [3]
+	for (int j=2, j<4, j++)
+	{
+		// copy children 0, 1 to node 1
+		node1->children[i]=x-keys[i];
+	}
+
+
+	
+	//replace x with the two new nodes, node1 and node 2.
+	//have x's parent have 1 and 2 as children and 1-2's parent point to x->parent
+
+	//increase how manychildren parent has
+	x->parent->countchildren++;
+
+
+	//if x's parent is also full, call again
+	if (x->parent->countchildren)
+}
 
 
 //search for user given an int.
@@ -103,7 +143,7 @@ int Btree::search(int perm, BTreeNode* x)
 		if (x->leaf==true)
 		{
 			//x is now a leaf node where the int shoul be.
-			current = x->parent; //the variable current now points to the node that is parent to where we want to find/insert the leaf
+			current = x; //the variable current now points to the node that we should insert at 
 			if (x->e1== perm)
 				return x->e1;
 			else if (x->e2 == perm)
@@ -114,7 +154,6 @@ int Btree::search(int perm, BTreeNode* x)
 		}
 
 	}		
-
 }
 
 //for sanitycheck's sake but im not even sure this works
@@ -122,6 +161,8 @@ void Btree:: traverse(BTreeNode *p)  {}
 
 int main ()
 {
-  std::cout<<"we have a main folks";
+  std::cout<<"we have a main folks. manual btree";
+  Btree b= new Btree();
+
   return 0;
 }

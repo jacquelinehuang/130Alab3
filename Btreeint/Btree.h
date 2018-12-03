@@ -16,7 +16,7 @@ class Btree
       //  void insert(User u, int index);
 
       bool abletoadd(int item);
-      void splitnode(int keyindex, int item);
+      void splitnode(BTreeNode* x, int item);
 
       int search(int perm, BTreeNode* x); //returns leaf node or NULL of where this perm exists
       void traverse(BTreeNode *p); //traverse from root

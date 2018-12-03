@@ -9,9 +9,9 @@ private:
     BTreeNode * parent; //parent pointer,
     int countkeys;     // counts number of keys
     int  countEntries; //counts how many entries in a leaf
+    int countchildren //counts children/leaf
     bool leaf; // Is true when node is leaf. Otherwise false
 
-    bool leafisfull;
     int e1=-1;//  always smaller number
     int e2=-1; //entry 2, larger number
 
@@ -24,7 +24,6 @@ public:
     e1= i;
     countEntries=1;
     parent =NULL;
-    leafisfull=false;
   }
   //other constructor for  internal nodes
   BTreeNode ()
@@ -39,10 +38,6 @@ public:
 
   }
 
-  //check that the leaf at this index child index can still hold more entries
-  bool leafIsNotFull(int childIndex){
-    return ((children[childIndex] == NULL) | (children[childIndex]->countEntries ==1));
-  }
   //swap to keep largest entry at e2
   void swapEntries(){
     int temp = e1;
@@ -51,9 +46,9 @@ public:
   }
 
   //if we need to put more entries into current's leaf nodes
-  void insertInLeaf(int childIndex, int i)
+  void insertInLeaf(int i)
   {
-    //if current's pointer to child at children[childIndex] is empty
+    //if current's is empty, aka create a new node
     if(children[childIndex] == NULL)
     {
       //make a totally new node that has e1=i
