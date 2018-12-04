@@ -43,14 +43,15 @@ bool Btree:: insert(Entry* item)
 			}
 			current->countEntries++;
 			//swap to keep largest entry at entries[1] for simplicity's sake
-			if (!(current->countEntries<2))
+			if (current->entries[0]->getkey()!=-1 && current->entries[1]->getkey()!=-1)
 			{
 				//we dont want to do this swap when theres an "empty" dummy entry
 				if (current->entries[0]->getkey()>current->entries[1]->getkey()) //comparison with getperm which calls users getperm
 				{
-				Entry *temp = current->entries[0];
-				current->entries[0]=current->entries[1];
-				current->entries[1]=temp;
+					cout<<"two entries. we need to swap them."<<endl;
+					Entry *temp = current->entries[0];
+					current->entries[0]=current->entries[1];
+					current->entries[1]=temp;
   				}
 			}
 
@@ -58,7 +59,7 @@ bool Btree:: insert(Entry* item)
 		//2) If leaves are full, 
 		else{
 
-cout<<"leaves are full"<<endl;
+		cout<<"leaves are full"<<endl;
 
 			/*Leaf splits into two parts.
 			1) If parent had 3 or less children initially, it can take a new leaf so it adds the split on. */
@@ -76,6 +77,7 @@ cout<<"leaves are full"<<endl;
 			//case child2 is largest
 			else
 			{
+				cout<<"an entry is the largest"<<endl;
 				//take out largest child2 to y. put item in a new leaf
 				y->entries[0]=current->entries[1];
 				current->entries[1]=item;
@@ -117,6 +119,7 @@ cout<<"leaves are full"<<endl;
 						currentparent-> children[n] = currentparent->children [n-1];
 					}
 				currentparent->children[currentloc+1]=y;
+				currentparent->countchildren++;
 				//have y's parent point toxparent for future use
 				y->parent = currentparent;
 
@@ -138,10 +141,12 @@ cout<<"leaves are full"<<endl;
 				splitnode(current->parent, leftovernode);
 			}
 		}
-		
+		cout<<"treeclass message: insert returns true; perm is "<<item->getkey()<<endl;
+		return true;
 	}
 
 	//else number exists, we don't insert
+	cout<<"number exists, no insertion"<<endl;
 	return false;
 }
 
@@ -295,7 +300,7 @@ Entry* Btree::searchHelper(int perm, BTreeNode* x)
 				searchHelper(perm, x->children[0]);
 			}else if ( (perm >= x->keys[0] && x->keys[1]==-1) ||(perm >= x->keys[0] && perm < x->keys[1])){ //perm between keys[0] and keys[1] or when only one key
 				searchHelper(perm, x->children[1]);
-			}else if ( (perm >= x->keys[0] && x->keys[1]==-1) || (perm >= x->keys[2]  && perm < x->keys[2])){ //perm between keys[1] and keys[2] or when only two keys
+			}else if ( (perm >= x->keys[1] && x->keys[2]==-1) || (perm >= x->keys[2]  && perm < x->keys[2])){ //perm between keys[1] and keys[2] or when only two keys
 				searchHelper(perm, x->children[2]);
 			}else { // countkeys==3 and perm is greater then keys[3]
 				searchHelper(perm, x->children[3]);
@@ -306,6 +311,7 @@ Entry* Btree::searchHelper(int perm, BTreeNode* x)
 //search for user given an int and return the entry that holds it. else return a mock entry with perm =-1
 Entry* Btree::search(int perm){
 
+	current=root;
 	return searchHelper(perm, root);
 }
 

@@ -20,7 +20,7 @@ int main ()
 	std::vector<Entry*> entrymaker;
 	
 	
-	ifs.open("tinytextfile.txt");
+	ifs.open("smalltextfile.txt");
 	if (ifs.fail()){
 		std::cout<< "Couldn't find text file" << std::endl;
 	}
@@ -64,12 +64,13 @@ int main ()
 	 {
 		//inserting in a graph and a tree
 		aBTree->insert(entrymaker[i]);
-		cout<<"TESTCLASS MESSAGE insert perm: "<<entrymaker[i]->getkey()<<endl;	
+		//cout<<"TESTCLASS MESSAGE inserted perm: "<<entrymaker[i]->getkey()<<endl;	
 
 	}
 	//insert to see if it picksup somethiing is wrong 
 	cout<<"make duplicate perm. what does it say?"<<endl;
 	aBTree->insert(new Entry (new User (1, "aa","aa","aa"),1) );
+	aBTree->insert(new Entry (new User (3, "aa","aa","aa"),1) );
 
 	//please work
 	cout<< "\nsearching for, 1 returns: " <<aBTree->search(1)->getkey()<<endl;
