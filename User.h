@@ -1,7 +1,4 @@
-#ifndef _USER
-#define _USER
 #include <string>
-
 class User{
 	
 	private:
@@ -20,7 +17,7 @@ class User{
 		//default construct
 		User ()
 		{
-			perm=-1;
+			perm= -1;
 			name="";
 			genre1="";
 			genre2="";
@@ -38,4 +35,3 @@ class User{
 		void setGenre1 (std::string g1)  { genre1 = g1; }
 		void setGenre2 (std::string g2)  { genre2 = g2; }
 };
-#endif

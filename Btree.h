@@ -7,17 +7,17 @@ class Btree
       BTreeNode* current; //node currently on
       BTreeNode* root; //root of btree
 
+      //helper funcs for insert
+      void splitnode(BTreeNode* x, BTreeNode* leftover);
+      int fixkeys (BTreeNode *x, int index); //traverse and find key to be at this index
+      Entry* searchHelper(int perm, BTreeNode* x); //helps w recursion search
+
     public:
-      Btree();
-      //making a new tree, which gives a root that is a default node with keys set to -1
-      //  void insert(User u, int index);
+      Btree(Entry *e);//making a new tree, which must start with some entry so we dont have all -1s
+      bool insert(Entry *item); //attempts to insert. tells us if it is possible unless it already exists
 
-      bool insert(Entry item);
-      void splitnode(BTreeNode* x, Entry item);
+      Entry* search(int perm);//returns leaf node or NULL of where this perm exists
 
-
-      Entry search(int perm);//returns leaf node or NULL of where this perm exists
-      Entry searchHelper(int perm, BTreeNode* x);
       void traverse(BTreeNode *p); //traverse from root
 
 

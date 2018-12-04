@@ -63,3 +63,6 @@ void UserInteraction::inputFile(){
 	}
 	aGraph.print();
 }
+void UserInteraction::reccomendfriends (int perm){
+	//aGraph.DFS(perm, aBTree);
+}

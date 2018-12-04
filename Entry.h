@@ -5,25 +5,26 @@
 
 class Entry {
 private:
-	User user;
+	User *user;
 	int index1;
 
 public:
 	Entry ()
 	{
-		user = User(); //default user with perm =-1
+		user = new User(); //default user with perm =-1
 		index1=-1;
 	}
 
-	Entry (User u, int i)
+	Entry (User *u, int i)
 	{
 		user = u;
 		index1=i;
 	}
+	
 	int getuserindex() {return index1;}
-	User getuser() {return user;}
+	User* getuser() {return user;}
 	void setuserindex(int graphpos) {index1=graphpos;}
 //for sanity's sake
-	int getperm() {return user.getPerm();}
+	int getkey() {return user->getPerm();}
 
 };
