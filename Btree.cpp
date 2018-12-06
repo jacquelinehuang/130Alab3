@@ -151,6 +151,8 @@ cout<<"inserting...\n";
 				}
 			}
 		}
+		//reset current.
+		current=root;
 		cout<<"treeclass message: insert returns true; perm is "<<item->getkey()<<endl;
 		return true;
 	}
@@ -298,11 +300,14 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 	//basecase, parent is not full. Fix keys and stop 
 	if ( xparent-> countchildren<=4 && leftovernodepisdummy==true)
 	{
-		cout<<"reached the base splitting nodes case. We will adjust the keys to be correct hopefully"<<endl;
-		for (int i=0; i<xparent->countchildren;i++)
+		cout<<"reached the base splitting nodes case. We will adjust the keys to be correct hopefully. parent has number of keys"<<endl;
+		cout<<xparent->countchildren<<endl;
+		for (int i=0; i<xparent->countchildren-1;i++)
 		{
 			xparent->keys[i]=fixkeys(xparent, i);
 		}
+
+		cout<<"did we make it out of the fixkeys loop";
 		return;
 	}
 

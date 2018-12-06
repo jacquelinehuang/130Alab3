@@ -106,6 +106,17 @@ int main ()
 
 	cout<<"out of loop2"<<endl;
 
+	cout<<aBTree->search(1231)->getkey()<<aBTree->search(1231)->getuser()->getName()<<endl;
+	cout<<aBTree->search(142)->getkey()<<aBTree->search(142)->getuser()->getName()<<endl;
+	cout<<aBTree->search(993)->getkey()<<aBTree->search(993)->getuser()->getName()<<endl;
+	cout<<aBTree->search(108)->getkey()<<aBTree->search(108)->getuser()->getName()<<endl;
+	cout<<aBTree->search(109)->getkey()<<aBTree->search(109)->getuser()->getName()<<endl;
+	cout<<aBTree->search(116)->getkey()<<aBTree->search(116)->getuser()->getName()<<endl;
+	cout<<aBTree->search(1117)->getkey()<<aBTree->search(1117)->getuser()->getName()<<endl;
+	cout<<aBTree->search(900)->getkey()<<aBTree->search(900)->getuser()->getName()<<endl;
+	cout<<aBTree->search(607)->getkey()<<aBTree->search(607)->getuser()->getName()<<endl;
+	cout<<aBTree->search(153)->getkey()<<aBTree->search(153)->getuser()->getName()<<endl;
+
 //rando order  test
 
 	aBTree->insert(new Entry (new User (999, "aa","aa","aa"),1) );
@@ -124,17 +135,6 @@ int main ()
 	aBTree->insert(new Entry (new User (1092, "aa","aa","aa"),1) );
 	aBTree->insert(new Entry (new User (385, "aa","aa","aa"),1) );
 
-
-	cout<<aBTree->search(1231)->getkey()<<aBTree->search(1231)->getuser()->getName()<<endl;
-	cout<<aBTree->search(142)->getkey()<<aBTree->search(142)->getuser()->getName()<<endl;
-	cout<<aBTree->search(993)->getkey()<<aBTree->search(993)->getuser()->getName()<<endl;
-	cout<<aBTree->search(108)->getkey()<<aBTree->search(108)->getuser()->getName()<<endl;
-	cout<<aBTree->search(109)->getkey()<<aBTree->search(109)->getuser()->getName()<<endl;
-	cout<<aBTree->search(116)->getkey()<<aBTree->search(116)->getuser()->getName()<<endl;
-	cout<<aBTree->search(1117)->getkey()<<aBTree->search(1117)->getuser()->getName()<<endl;
-	cout<<aBTree->search(900)->getkey()<<aBTree->search(900)->getuser()->getName()<<endl;
-	cout<<aBTree->search(607)->getkey()<<aBTree->search(607)->getuser()->getName()<<endl;
-	cout<<aBTree->search(153)->getkey()<<aBTree->search(153)->getuser()->getName()<<endl;
 
 		//please work
 	cout<< "\nsearching for, 1 returns: " <<aBTree->search(1)->getkey()<<endl;
@@ -162,6 +162,7 @@ int main ()
 	cout<< "searching for, 110 returns: " <<aBTree->search(110)->getkey()<<endl;
 	cout<< "searching for, 111 returns: " <<aBTree->search(1092)->getkey()<<endl;	
 	cout<< "searching for, 305 returns: " <<aBTree->search(385)->getkey()<<endl;
+
 
 	return 0;
 }
