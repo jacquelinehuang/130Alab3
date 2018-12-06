@@ -1,4 +1,7 @@
 #include <string>
+#include <iostream>
+using std::string;
+
 class User{
 	
 	private:
@@ -34,4 +37,8 @@ class User{
 		void setName (std::string n)  { name = n; }
 		void setGenre1 (std::string g1)  { genre1 = g1; }
 		void setGenre2 (std::string g2)  { genre2 = g2; }
+		void print()
+		{
+			std::cout<<"User of perm "<< perm<<" is " <<name<<" who likes movie genres 1)" <<genre1 << "and 2)" << genre2;
+		}
 };

@@ -55,8 +55,6 @@ void UserInteraction::inputFile(){
 		
 		//inserting in a graph and a tree		
 		int index = aGraph.insertInGraph(userAndFriends);
-		//aBTree.insertInBTree(newUser, index);
-		
 		
 		// will need to clean vector after each user!!!!
 		userAndFriends.clear();

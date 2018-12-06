@@ -77,8 +77,6 @@ int main ()
 	cout<< "searching for, 25 returns: " <<aBTree->search(25)->getkey()<<endl;
 	cout<< "searching for, 29 returns: " <<aBTree->search(29)->getkey()<<endl;
 	cout<< "searching for, 57 returns: " <<aBTree->search(57)->getkey()<<endl;
-
-	cout<< "searching for, 253 returns: " <<aBTree->search(253)->getkey()<<endl;
 	cout<< "searching for, 107 returns: " <<aBTree->search(107)->getkey()<<endl;
 	cout<< "searching for, 89 returns: " <<aBTree->search(89)->getkey()<<endl;
 
@@ -92,9 +90,27 @@ int main ()
 	aBTree->insert(new Entry (new User (3, "aa","aa","aa"),1) );
 	aBTree->insert(new Entry (new User (24, "aa","aa","aa"),1) );
 
-	cout<<"insert new perm"<<endl;
-	aBTree->insert(new Entry (new User (54, "aa","aa","aa"),1) );
-	cout<< "searching for, 54 returns: " <<aBTree->search(54)->getkey()<<endl;
-	
+	cout<<"insert new perms"<<endl;
+	aBTree->insert(new Entry (new User (108, "aa","aa","aa"),1) );	
+	aBTree->insert(new Entry (new User (154, "aa","aa","aa"),1) );
+	aBTree->insert(new Entry (new User (244, "aa","aa","aa"),1) );
+	aBTree->insert(new Entry (new User (0, "aa","aa","aa"),1) );
+//	aBTree->insert(new Entry (new User (173, "aa","aa","aa"),1) );
+//	aBTree->insert(new Entry (new User (125, "aa","aa","aa"),1) );
+	aBTree->insert(new Entry (new User (109, "aa","aa","aa"),1) );
+	aBTree->insert(new Entry (new User (110, "aa","aa","aa"),1) );
+	aBTree->insert(new Entry (new User (111, "aa","aa","aa"),1) );
+	aBTree->insert(new Entry (new User (305, "aa","aa","aa"),1) );
+
+	cout<< "searching for, 154 returns: " <<aBTree->search(154)->getkey()<<endl;
+	cout<< "searching for, 244 returns: " <<aBTree->search(244)->getkey()<<endl;
+	cout<< "searching for, 0 returns: " <<aBTree->search(0)->getkey()<<endl;
+	//cout<< "searching for, 173 returns: " <<aBTree->search(173)->getkey()<<endl;
+	cout<< "searching for, 108 returns: " <<aBTree->search(108)->getkey()<<endl;
+	//cout<< "searching for, 125 returns: " <<aBTree->search(125)->getkey()<<endl;
+	cout<< "searching for, 109 returns: " <<aBTree->search(109)->getkey()<<endl;
+	cout<< "searching for, 110 returns: " <<aBTree->search(110)->getkey()<<endl;
+	cout<< "searching for, 111 returns: " <<aBTree->search(111)->getkey()<<endl;	
+	cout<< "searching for, 111 returns: " <<aBTree->search(305)->getkey()<<endl;	
 	return 0;
 }

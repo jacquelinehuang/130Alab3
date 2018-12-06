@@ -20,6 +20,7 @@ Btree::Btree(Entry* e){
 bool Btree:: insert(Entry* item)
 {
 
+cout<<"inserting...\n";
 	//current is a leafnode, found as a byproduct of using search. 
 	Entry *foundentry =search(item->getkey());
 	foundentry->getuserindex();
@@ -185,7 +186,7 @@ int Btree::fixkeys (BTreeNode *x, int index)
 	else
 		keycorrection=temp->entries[0]->getkey();
 
-	cout<<"keycorrection is:"<<keycorrection<<endl;
+	//cout<<"keycorrection is:"<<keycorrection<<endl;
 	}
 
 	

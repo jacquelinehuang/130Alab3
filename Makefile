@@ -8,10 +8,7 @@ BINARIES = main BtreeTest
 
 BtreeTest: Btree.o BtreeTest.o 
 	${CXX} $^ -o $@
-
-main: 
-	g++ -o main Main.cpp UserInteraction.cpp Graph.cpp
-
-
+main: Main.o Btree.o Graph.o
+	g++ $^ -o $@
 clean:
 	rm -f main {BINARIES} *.o

@@ -13,6 +13,10 @@ class Graph
 	void print();
     void DFS ();
 
+    //more necessary functions
+    void adjustfriends();
+    vector<int> getfriends(int index);
+
 };
 
 #endif
