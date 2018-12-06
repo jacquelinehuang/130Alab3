@@ -3,7 +3,7 @@
 #CXX=clang++
 CXX =g++
 
-CXXFLAGS = -g -std=c++11 -Wall -Wextra -Wno-unused-parameter -Wno-unused-private-field
+CXXFLAGS = -g -std=c++11 -Wall -Wextra -Wno-unused-parameter #-Wno-unused-private-field
 BINARIES = main BtreeTest
 
 BtreeTest: Btree.o BtreeTest.o 

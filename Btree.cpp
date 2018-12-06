@@ -22,6 +22,7 @@ bool Btree:: insert(Entry* item)
 
 	//current is a leafnode, found as a byproduct of using search. 
 	Entry *foundentry =search(item->getkey());
+	foundentry->getuserindex();
 
 	//if we search and cannot find the item, aka we returned amock entry with a negative perm, then we can proceed to inserting
 	if (foundentry->getkey()<0)
@@ -60,6 +61,7 @@ bool Btree:: insert(Entry* item)
 		else{
 
 		cout<<"leaves are full"<<endl;
+		BTreeNode* leftovernode; //there will be one leaf that doesn't fit. if it's a dummy node, we don't care 
 
 			/*Leaf splits into two parts.
 			1) If parent had 3 or less children initially, it can take a new leaf so it adds the split on. */
@@ -105,40 +107,48 @@ bool Btree:: insert(Entry* item)
 					break;
 				}
 			}
-
-			BTreeNode* leftovernode; //there will be one leaf that doesn't fit. if it's a dummy node, we don't care 
-
 			//first move everything down a slot, so our leftover node from the split always holds the largest elements for sanity's sake			
 			//to make sure not to get a segfault if x is in slot 3. If x is in slot 3, y immediately is the leftovernode 
-			if (currentloc== 3)	{ leftovernode=y;}
+			if (currentloc== 3)	{ 
+				leftovernode=y;
+					current->parent->countchildren=4;
+				}
+			//PROBLEM HERE*******/
 			//if x isn't the last node move everything down one space in the array until we hit location of current. put y in that slot
 			else{
 				leftovernode= currentparent->children[3];
-				for (int n=3; n<currentloc;n++)
+				for (int n=3; n<currentloc; n++)
 					{
 						currentparent-> children[n] = currentparent->children [n-1];
 					}
+
 				currentparent->children[currentloc+1]=y;
-				currentparent->countchildren++;
+
+				if (current->countchildren<4)
+					currentparent->countchildren++;
 				//have y's parent point toxparent for future use
 				y->parent = currentparent;
 
-				//increment as normal if leftover was a dummy node. this means the num of entries is 0 and its a dummy node we dont care about
-				if ( leftovernode->entries[0]->getkey()==-1 && leftovernode->entries[1]->getkey()==-1)
-					currentparent->countchildren++;
+				for (int k=0; k<3;k++)
+				{
+					current->parent->keys[k]=fixkeys(current->parent, k);
+				}
 			}
+			//increment as normal if leftover was a dummy node. this means the num of entries is 0 and its a dummy node we dont care about
+			//if ( leftovernode->entries[0]->getkey()==-1 && leftovernode->entries[1]->getkey()==-1)
+			//currentparent->countchildren++;
+			
 			//if the leafsplit requires no node split, update =parents keys here
-			for (int k=0; k<3;k++)
-			{
-				current->parent->keys[k]=fixkeys(current->parent, k);
-			}
 
 
 			//since we're dealing with leaves here, the pushed out leaf node will have a non dummy entry if the node was previously full
 			//this means parent of current is full, call split
-			if (leftovernode->entries[0]->getkey()>0)
-			{
-				splitnode(current->parent, leftovernode);
+			if (leftovernode!=NULL){
+				if ( (current->parent->countchildren==4 && leftovernode->entries[1]->getkey()>0) )
+				{
+					cout<<"reached the splitnode option"<<endl;
+					splitnode(current->parent, leftovernode);
+				}
 			}
 		}
 		cout<<"treeclass message: insert returns true; perm is "<<item->getkey()<<endl;
@@ -156,12 +166,19 @@ int Btree::fixkeys (BTreeNode *x, int index)
 	//index is index of key we're trying to adjust, will only be 0-2
 	int keycorrection;
 
-	BTreeNode* temp = x->children[index+1]; //traverse r left left left. find r child of key	
-	//traverse left left left until leaf, return smallest.
-	while (!(temp->leaf))
+	//traverse r left left left. If we reach a null index, key is still -1
+	//step right
+	BTreeNode* temp = x->children[index+1]; 
+
+	//
+	if (temp==NULL) 
+		return -1;
+
+	while (temp!=NULL && !(temp->leaf))
 	{
 		temp=temp->children[0];
 	}
+	
 	if (temp->entries[0]->getkey()==-1)
 		keycorrection=temp->entries[1]->getkey();
 	else
@@ -173,9 +190,9 @@ int Btree::fixkeys (BTreeNode *x, int index)
 void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 {
 	//Split, which is called each time
-	BTreeNode *xparent= new BTreeNode(); //for easier ref of parent of original node we split
+	BTreeNode *xparent= x->parent; //for easier ref of parent of original node we split
 
-	///splitting function
+	///splitting node
 	//x is a full node with full leaves. X becomes Xminus data in Y will take some of the data, + the new leftover node
 	BTreeNode *y= new BTreeNode ();
 	//a bad split hard coded for 4 nodes and a 2/3 split.
@@ -183,11 +200,13 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 	y->children[0]=x->children[2];
 	y->children[1]=x->children[3];
 	y->children[2]=leftovernode;
-	leftovernode->parent=y;
+	//y->children[3]=new BTreeNode();
+	y->children[2]->parent=y;
 	y->countchildren=3;
-	//adjust x to only hold 2 children, reset the keys
-	x->children[2]=nullptr;
-	x->children[3]=nullptr;
+
+	//adjust x to only hold 2 children, the other two are empty leaves. Also reset the keys
+	x->children[2]=new BTreeNode ();
+	x->children[3]=new BTreeNode ();
 	x->keys[1]=-1;
 	x->keys[2]=-1;
 	x->countchildren=2;
@@ -201,23 +220,26 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 
 	//now onto 3 cases
 	//base case to handle root, do special things aka make new root with 2 children
-	if (xparent ==nullptr||x==root)
+	if (x==root)
 	{
 		xparent=new BTreeNode();
 		xparent->children[0]=x;
 		xparent->children[1]=y;
+
 		y->parent=xparent;
 		x->parent=xparent;
 
 		//fix keys for new root
-		xparent->keys[0]=fixkeys (x,0);
+		root=xparent;
+		root->keys[0]=fixkeys (root,0);
+		root->countchildren=2;
 
 		return;
 	}
 
 	//now that we have a new y, insert it as a child to xparent next to x
 	//find location of x, place y in next spot
-	//go through parent's children[] to find location of x in array
+	//xloc is the spot where x is in xparent's chilren
 	int xloc;
 	for (int i = 0; i < x->countchildren; i++)
 	{
@@ -226,16 +248,20 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 	}
 	//first move everything down a slot, so our leftover node always holds the largest elem
 	//make sure not to get a segfault if x is in slot 3. If x is in slot 3, y immediately is the leftovernode 
-	if (xloc== 3)	{ leftovernode=y;}
+	if (xloc== 3)	
+	{ 
+		cout<<"leftovernode wouldbe equal to y"<<endl;
+		leftovernode=y;
+	}
 	//where children[pos of curent] = stopping point 
-	//move everything down one space in the array
+	//move everything down one spac]->getkey()>0)e in the array
 	else{
 		leftovernode= xparent->children[3];
 		for (int n=3; n<xloc;n++)
 			{
 				xparent-> children[n] = xparent->children [n-1];
 			}
-		xparent->children[xloc]=y;
+		xparent->children[xloc+1]=y;
 		//have y's parent point toxparent for future use
 		y->parent = xparent;
 		
@@ -244,20 +270,36 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 				xparent->countchildren++;
 	}
 	
+	bool leftovernodeisdummy;
+	for (int i=0; i<3; i++)
+	{
+		if (leftovernode==NULL||leftovernode->keys[i]>=0)
+		{
+			leftovernodeisdummy=true;
+			break;
+		}
+		else
+			leftovernodeisdummy=false;
+	}
+
 	//basecase, parent is not full. Fix keys and stop 
-	if ( xparent->countchildren<=4 && leftovernode != nullptr)
+	if ( xparent-> countchildren<=4 && leftovernodeisdummy)
 	{
 		//
-		for (int i=0; i<3;i++)
+		for (int i=0; i<xparent->countchildren;i++)
 		{
 			xparent->keys[i]=fixkeys(xparent, i);
 		}
 		return;
 	}
 
+//	cout<<"leftovernode rn holds: "<<leftovernode->entries[0]->getkey()<<leftovernode->entries[1]->getkey()<<endl;
+
 	//check if leftovernode has real entries or the dummy ones we implemented 
-	if ( xparent->countchildren>=4 && leftovernode != nullptr)
+	//CHECK FOR DUMMIES, THEY ARE NOT NULL AT HTIS POINT 
+	if (xparent->countchildren >= 4 && !leftovernode)
 	{
+		cout<<"btreeccp line 265 inside the if, about to split node"<<endl;
 		splitnode(xparent,leftovernode);
 	}
 
@@ -275,43 +317,60 @@ Entry* Btree::searchHelper(int perm, BTreeNode* x)
 		{
 			//x is now a leaf node where the int shoul be.
 			current = x; //the variable current now points to the node that we should insert at
+			
 			if (x->entries[0]->getkey()== perm)
 			{
-				cout<<"in entry 1 search found this perm: "<<x->entries[0]->getkey();
+				//cout<<"in entry 1 search found this perm: "<<x->entries[0]->getkey();
 				return x->entries[0];
 			}	
 			else if (x->entries[1]->getkey() == perm)
 			{
 				
-				cout<<"apparently in entry 2 search found this perm: "<<x->entries[1]->getkey();
+				//cout<<"apparently in entry 2 search found this perm: "<<x->entries[1]->getkey();
 				return x->entries[1];
 			}		
 			else
 			{
 					Entry *pointer2 = new Entry();
-					cout<<"not found. dummy perm: "<<pointer2->getkey();
+					//cout<<"not found. dummy perm: "<<pointer2->getkey();
 					return pointer2;
 			}		
 		}
 		//if x is not a leaf...
 		else
 		{
-			if(perm <x->keys[0]){ //perm less then keys[0]
+			if(perm < x->keys[0]){ //perm less then keys[0]
 				searchHelper(perm, x->children[0]);
-			}else if ( (perm >= x->keys[0] && x->keys[1]==-1) ||(perm >= x->keys[0] && perm < x->keys[1])){ //perm between keys[0] and keys[1] or when only one key
+			}
+			else if (x->keys[1]!=-1 && perm < x->keys[1]){ //perm between keys[0] and keys[1] or when only one key
 				searchHelper(perm, x->children[1]);
-			}else if ( (perm >= x->keys[1] && x->keys[2]==-1) || (perm >= x->keys[2]  && perm < x->keys[2])){ //perm between keys[1] and keys[2] or when only two keys
+			}
+			else if (x->keys[1]==-1 ){
+				searchHelper(perm, x->children[1]);
+			}
+			else if (x->keys[2]!=-1 && perm < x->keys[2]){ //perm between keys[1] and keys[2] or when only two keys
 				searchHelper(perm, x->children[2]);
-			}else { // countkeys==3 and perm is greater then keys[3]
+			}
+			else if (x->keys[2]==-1 ){
+				searchHelper(perm, x->children[2]);
+			}
+			else { // countkeys==3 and perm is greater then keys[3]
 				searchHelper(perm, x->children[3]);
 			}
 		}
+	}
+
+	else
+	{
+		Entry *debug = new Entry();
+		debug->setuserindex(-2);
+		return debug;
 	}
 }
 //search for user given an int and return the entry that holds it. else return a mock entry with perm =-1
 Entry* Btree::search(int perm){
 
-	current=root;
+	//current=root;
 	return searchHelper(perm, root);
 }
 

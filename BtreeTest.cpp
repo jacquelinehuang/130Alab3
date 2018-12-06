@@ -20,7 +20,7 @@ int main ()
 	std::vector<Entry*> entrymaker;
 	
 	
-	ifs.open("smalltextfile.txt");
+	ifs.open("textFile.txt");
 	if (ifs.fail()){
 		std::cout<< "Couldn't find text file" << std::endl;
 	}
@@ -75,8 +75,10 @@ int main ()
 	//please work
 	cout<< "\nsearching for, 1 returns: " <<aBTree->search(1)->getkey()<<endl;
 	cout<< "searching for 8, returns: " <<aBTree->search(8)->getkey()<<endl;
-	cout<< "searching for, 249 returns: "<< aBTree->search(249)->getkey()<<endl;
-	cout<< "searching for, 75 returns: " <<aBTree->search(75)->getkey()<<endl;
+	cout<< "searching for, 5 returns: "<< aBTree->search(5)->getkey()<<endl;
+	cout<< "searching for, 6 returns: " <<aBTree->search(6)->getkey()<<endl;
+	cout<< "searching for, 71 returns: " <<aBTree->search(71)->getkey()<<endl;
+	cout<< "searching for, 12 returns: " <<aBTree->search(12)->getkey()<<endl;
 	cout<< "searching for, 57 returns: " <<aBTree->search(57)->getkey()<<endl;
 	
 	return 0;

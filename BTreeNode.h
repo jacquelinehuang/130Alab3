@@ -24,7 +24,7 @@ public:
   BTreeNode (bool isleaf){
     for (int i=0; i<3; i++) {keys [i]=-1;} //no valid keys because is leaf
     leaf= isleaf;
-    
+
     //make nonnull entries that are dummy entries
     entries[0] =new Entry();
     entries[1] =new Entry();
@@ -50,6 +50,7 @@ public:
     //adjust to turn to root with one entry and one leaf.
     children[0]->entries[0]=start;
     children[0]->countEntries=1;
+    
     keys[0]=1+start->getkey();
 
   }
@@ -59,6 +60,8 @@ public:
   {
     leaf = false;
     countEntries = 0;
+    countchildren=0;
+    parent=nullptr;
     //default -1 keys 
     for (int i=0; i<3; i++) {keys [i]=-1;}
 
