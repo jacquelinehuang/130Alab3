@@ -75,11 +75,13 @@ bool Btree:: insert(Entry* item)
 
 			//case item is largest
 			if (maxentry==item->getkey()) 
-			{ y->entries[1]=item; cout<<"item is largest"<<endl;}
+			{ y->entries[1]=item; 
+			//cout<<"item is largest"<<endl;
+			}
 			//case child2 is largest
 			else
 			{
-				cout<<"an entry is the largest"<<endl;
+				//cout<<"an entry is the largest"<<endl;
 				//take out largest child2 to y. put item in a new leaf
 				y->entries[1]=current->entries[1];
 				current->entries[1]=item;
@@ -114,7 +116,6 @@ bool Btree:: insert(Entry* item)
 				leftovernode=y;
 					current->parent->countchildren=4;
 				}
-			//PROBLEM HERE*******/
 			//if x isn't the last node move everything down one space in the array until we hit location of current. put y in that slot
 			else{
 				leftovernode= currentparent->children[3];
@@ -140,11 +141,13 @@ bool Btree:: insert(Entry* item)
 
 			//since we're dealing with leaves here, the pushed out leaf node will have a non dummy entry if the node was previously full
 			//this means parent of current is full, call split
-			if (leftovernode!=NULL){
-				if ( (current->parent->countchildren==4 && leftovernode->entries[1]->getkey()>0) )
+			if (leftovernode!=NULL)
+			{
+				if ( (current->parent->countchildren==4 && leftovernode->leaf && leftovernode->entries[1]->getkey()>0) )
 				{
 					cout<<"reached the splitnode option"<<endl;
 					splitnode(current->parent, leftovernode);
+					cout<<"after splitnodecall\n";
 				}
 			}
 		}
@@ -198,12 +201,12 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 	///splitting node
 	//x is a full node with full leaves. X becomes Xminus data in Y will take some of the data, + the new leftover node
 	BTreeNode *y= new BTreeNode ();
-	//a bad split hard coded for 4 nodes and a 2/3 split.
-	//copy the second half of children in x to y plus the third floating node
+	//a bad split hard coded for 4 increment 
+	//copy the second half of childincrement 
 	y->children[0]=x->children[2];
 	y->children[1]=x->children[3];
 	y->children[2]=leftovernode;
-	//y->children[3]=new BTreeNode();
+	y->children[3]=new BTreeNode();
 	y->children[2]->parent=y;
 	y->countchildren=3;
 
@@ -220,8 +223,6 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 	//fix keys for y. y has 3 elements and 2keys
 	y->keys[0]=fixkeys(y, 0);
 	y->keys[1]=fixkeys(y, 1);
-
-	cout<<"aftern ode split. try to check that x and y hold what you expect"<<endl;
 
 	//now onto 3 cases
 	//base case to handle root, do special things aka make new root with 2 children
@@ -242,57 +243,59 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 		return;
 	}
 
-	//cout<<"not a root split. letsgoooooooo"<<endl;
-
 	//now that we have a new y, insert it as a child to xparent next to x
 	//find location of x, place y in next spot
 	//xloc is the spot where x is in xparent's chilren
+
 	int xloc;
-	for (int i = 0; i < x->countchildren; i++)
+	for (int i = 0; i < xparent->countchildren; i++)
 	{
 		if (xparent->children[i]==x)
 				xloc=i;
 	}
+
+	BTreeNode *leftovernodep;
 	//first move everything down a slot, so our leftover node always holds the largest elem
-	//make sure not to get a segfault if x is in slot 3. If x is in slot 3, y immediately is the leftovernode 
+	//make sure not to get a segfault if x is in slot 3. If x is in slot 3, y immediately is the leftovernode of the parent
 	if (xloc== 3)	
 	{ 
-		cout<<"leftovernode wouldbe equal to y"<<endl;
-		leftovernode=y;
+		leftovernodep=y;
+		xparent->countchildren=4; //if x is already on the last slot, parent must have 4 kids
 	}
-	//where children[pos of curent] = stopping point 
-	//move everything down one spac]->getkey()>0)e in the array
+	//where children[pos of curent] = stopping point move child down one space in the array. the leftovernodep is now the lsat one
 	else{
-		leftovernode= xparent->children[3];
+		leftovernodep= xparent->children[3];
 		for (int n=3; n<xloc;n++)
 			{
 				xparent-> children[n] = xparent->children [n-1];
 			}
 		xparent->children[xloc+1]=y;
-		//have y's parent point toxparent for future use
+		cout<<"splitnode attatching y to xparent."<<endl;
 		y->parent = xparent;
+
+cout<<"btree splitnode of parent. the y node goes into location"<<xloc+1<<endl;
 		
 		//increment only if numofchildren is not 4 yet 
 		if (xparent->countchildren<4)
 				xparent->countchildren++;
 	}
 	
-	bool leftovernodeisdummy;
+	bool leftovernodepisdummy;
 	for (int i=0; i<3; i++)
 	{
-		if (leftovernode&&leftovernode->keys[i]>=0)
+		if (leftovernodep!=NULL&&leftovernodep->keys[i]>=0)
 		{
-			leftovernodeisdummy=false;
+			leftovernodepisdummy=false;
 			break;
 		}
 		else
-			leftovernodeisdummy=true;
+			leftovernodepisdummy=true;
 	}
 
 	//basecase, parent is not full. Fix keys and stop 
-	if ( xparent-> countchildren<=4 && leftovernodeisdummy==true)
+	if ( xparent-> countchildren<=4 && leftovernodepisdummy==true)
 	{
-		//
+		cout<<"reached the base case. We will adjust the keys to be correct hopefully"<<endl;
 		for (int i=0; i<xparent->countchildren;i++)
 		{
 			xparent->keys[i]=fixkeys(xparent, i);
@@ -300,14 +303,12 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 		return;
 	}
 
-//	cout<<"leftovernode rn holds: "<<leftovernode->entries[0]->getkey()<<leftovernode->entries[1]->getkey()<<endl;
-
 	//check if leftovernode has real entries or the dummy ones we implemented 
 	//CHECK FOR DUMMIES, THEY ARE NOT NULL AT HTIS POINT 
-	if (xparent->countchildren >= 4 && !leftovernodeisdummy)
+	if (xparent->countchildren == 4 && leftovernodepisdummy==false)
 	{
 		cout<<"btreeccp line 265 inside the if, about to split node"<<endl;
-		splitnode(xparent,leftovernode);
+		splitnode(xparent,leftovernodep);
 	}
 
 }

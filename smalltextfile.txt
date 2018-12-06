@@ -16,3 +16,14 @@
 16;Bran;Sci-Fi;Adventure;13;32;33;22;34;35;36;23;3;37;43;76;49;51
 17;Brynden;Crime;Horror;13;41;42;43;44;102;49;8
 18;Cersei;Sci-Fi;Drama;13;43;38;39;53;20;54;5;21;55;56;6;25;57;7;58;76;47;51;8
+19;Gendry;Action;Horror;13;15;26;25
+20;Gregor;Crime;Fantasy;13;39;18;53;54;55;12;25;5;21;7;8
+21;Joffrey;Sci-Fi;Horror;13;18;5;20;54;84;28;85;55;86;12;25;52;81;7;49;51;8
+22;Jon;Horror;Crime;13;16;76;1;9;59;87;77;78;2;82;10;35;88;89;90;91;6;3;52;92;37;93;94;49;51
+23;Rickon;Action;Adventure;13;16;76;37;49;51
+24;Roose;Drama;Sci-Fi;13;43;49;38
+25;Sandor;Sci-Fi;Horror;13;18;76;20;21;15;19;54;55;6;26;51;7
+26;Thoros;Crime;Horror;13;15;19;6;25
+27;Balon;Horror;Adventure;28;5;49;52;7;8
+28;Loras;Adventure;Horror;27;38;5;21;85;97;80;51;7
+29;Belwas;Action;Drama;30;31;64;66

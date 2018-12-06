@@ -45,9 +45,9 @@ public:
         children[i] = new BTreeNode(true);
     }
     parent=nullptr;
-    cout<<"in constructor for root node."<<endl;
 
     //adjust to turn to root with one entry and one leaf.
+    countchildren=1;
     children[0]->entries[0]=start;
     children[0]->countEntries=1;
     

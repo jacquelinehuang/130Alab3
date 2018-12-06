@@ -20,7 +20,7 @@ int main ()
 	std::vector<Entry*> entrymaker;
 	
 	
-	ifs.open("smalltextfile.txt");
+	ifs.open("textFile.txt");
 	if (ifs.fail()){
 		std::cout<< "Couldn't find text file" << std::endl;
 	}
@@ -72,9 +72,15 @@ int main ()
 	cout<< "searching for 8, returns: " <<aBTree->search(8)->getkey()<<endl;
 	cout<< "searching for, 5 returns: "<< aBTree->search(5)->getkey()<<endl;
 	cout<< "searching for, 6 returns: " <<aBTree->search(6)->getkey()<<endl;
-	cout<< "searching for, 71 returns: " <<aBTree->search(71)->getkey()<<endl;
+	cout<< "searching for, 17 returns: " <<aBTree->search(17)->getkey()<<endl;
 	cout<< "searching for, 12 returns: " <<aBTree->search(12)->getkey()<<endl;
+	cout<< "searching for, 25 returns: " <<aBTree->search(25)->getkey()<<endl;
+	cout<< "searching for, 29 returns: " <<aBTree->search(29)->getkey()<<endl;
 	cout<< "searching for, 57 returns: " <<aBTree->search(57)->getkey()<<endl;
+
+	cout<< "searching for, 253 returns: " <<aBTree->search(253)->getkey()<<endl;
+	cout<< "searching for, 107 returns: " <<aBTree->search(107)->getkey()<<endl;
+	cout<< "searching for, 89 returns: " <<aBTree->search(89)->getkey()<<endl;
 
 
 
@@ -84,7 +90,11 @@ int main ()
 	cout<<"make duplicate perm. what does it say?"<<endl;
 	aBTree->insert(new Entry (new User (1, "aa","aa","aa"),1) );
 	aBTree->insert(new Entry (new User (3, "aa","aa","aa"),1) );
+	aBTree->insert(new Entry (new User (24, "aa","aa","aa"),1) );
 
+	cout<<"insert new perm"<<endl;
+	aBTree->insert(new Entry (new User (54, "aa","aa","aa"),1) );
+	cout<< "searching for, 54 returns: " <<aBTree->search(54)->getkey()<<endl;
 	
 	return 0;
 }
