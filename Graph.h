@@ -2,6 +2,13 @@
 #define _GRAPH
 #include <vector>
 #include <stack> 
+#include "Graph.h"
+#include "Btree.h"
+#include <iostream>
+#include <algorithm>  
+#include "User.h"
+#include "Entry.h"
+
 class Graph
 {
  private:

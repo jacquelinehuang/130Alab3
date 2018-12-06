@@ -2,6 +2,7 @@
 #define _USERINTERACTION
 #include "User.h"
 #include "Graph.h"
+#include "Entry.h"
 
 class UserInteraction 
 {

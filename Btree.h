@@ -1,7 +1,11 @@
+#ifndef _BTREE
+#define _BTREE
 #include "User.h"
 #include "BTreeNode.h"
 #include "Entry.h"
 // A BTree node
+
+#include "BTreeNode.h"
 
 class Btree
 {
@@ -9,17 +13,18 @@ class Btree
     private:
       BTreeNode* current; //node currently on
       BTreeNode* root; //root of btree
-      int height; // height of tree so far unnecessary so ?? we'll see
-	  int numOfElms;
+
+      //helper funcs for insert
+      void splitnode(BTreeNode* x, BTreeNode* leftover);
+      int fixkeys (BTreeNode *x, int index); //traverse and find key to be at this index
+      Entry* searchHelper(int perm, BTreeNode* x); //helps w recursion search
 
     public:
-        Btree();
-        //making a new tree, which gives a node that is a leaf
-        Btree(Entry *en1, Entry *en2);
-		BTreeNode* getRoot();
-        void insert(User u, int index);
-        void split (BTreeNode *x, int i);
-		Entry searchInBtree(int perm);
-        Entry searchHelper(int perm, BTreeNode* root); //returns leaf node or NULL of where this perm exists
-		bool isFound(int perm);
+      Btree(Entry *e);//making a new tree, which must start with some entry so we dont have all -1s
+      bool insert(Entry *item); //attempts to insert. tells us if it is possible unless it already exists
+
+      Entry* search(int perm);//returns leaf node or NULL of where this perm exists
+
 };
+
+#endif

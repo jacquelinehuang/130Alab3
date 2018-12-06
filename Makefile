@@ -9,7 +9,7 @@ BtreeTest: Btree.o BtreeTest.o
 	${CXX} $^ -o $@
 
 main: 
-	g++ -o main Main.cpp UserInteraction.cpp Graph.cpp
+	g++ -o main Main.cpp Btree.cpp UserInteraction.cpp Graph.cpp
 
 
 clean:

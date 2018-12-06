@@ -1,29 +1,78 @@
 
+#ifndef _BTREENODE
+#define _BTREENODE
+#include <algorithm>
+#include "Entry.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 class BTreeNode
 {
 private:
-     int keys [3];  // An array of keys- Max number m-1 =3
+
+    int keys [3];  // An array of keys- Max number m-1 =3
     BTreeNode * children[4]; //array of pointers to its children. default to max size 4
+    Entry * entries[2]; //array of entries
     BTreeNode * parent; //parent pointer,
     int countkeys;     // counts number of keys
     int  countEntries; //counts how many entries in a leaf
+    int countchildren; //counts how many children this node has
     bool leaf; // Is true when node is leaf. Otherwise false
-    int e1;//  always smaller number
-    int e2;
- public:
+
+public:
 	//node constructor, assuming for insert at leaf.
-	BTreeNode (int i);
-	//Will use setters to fix for nodes created by splitting.
-	//default constructor for internal nodes
-	BTreeNode ();
-	bool leafIsNotFull(int childIndex);
-	bool abletoadd(int item);
-	void insertInLeaf(int childIndex, int i);
-	void swapEntries();
-	void split (int keyindex, int item);
-	
-	// Friend so we can acess data as if it were a struct
-	friend class Btree;
+
+  //make a new leaf constructor
+  BTreeNode (bool isleaf){
+    for (int i=0; i<3; i++) {keys [i]=-1;} //no valid keys because is leaf
+    leaf= isleaf;
+
+    //make nonnull entries that are dummy entries
+    entries[0] =new Entry();
+    entries[1] =new Entry();
+    countEntries=0;
+  }
+
+  //make root 
+  BTreeNode (Entry* start)
+  {
+    leaf = false;
+    countEntries = 0;
+    //default -1 keys 
+    for (int i=0; i<3; i++) {keys [i]=-1;}
+    //attatch empty leaves.
+    for (int i=0; i<4; i++)
+    {
+      //make all children leaves since it is a root
+        children[i] = new BTreeNode(true);
+    }
+    parent=nullptr;
+
+    //adjust to turn to root with one entry and one leaf.
+    countchildren=1;
+    children[0]->entries[0]=start;
+    children[0]->countEntries=1;
+    
+    keys[0]=1+start->getkey();
+
+  }
+
+  //other constructor for  internal nodes
+  BTreeNode ()
+  {
+    leaf = false;
+    countEntries = 0;
+    countchildren=0;
+    parent=nullptr;
+    //default -1 keys 
+    for (int i=0; i<3; i++) {keys [i]=-1;}
+
+  }
+
+
+// Friend so we can acess data as if it were a struct
+friend class Btree;
 };
+
 #endif

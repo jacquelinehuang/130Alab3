@@ -1,6 +1,4 @@
-#include "Graph.h"
-#include <iostream>
-#include <algorithm>  
+
 int Graph::insertInGraph(std::vector<int> userAndFriends){
 	// first elm of userAndFriends is userPerm and nextElms are friends' perms
 	alist.push_back(userAndFriends);
