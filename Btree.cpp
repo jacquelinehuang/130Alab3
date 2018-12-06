@@ -81,9 +81,10 @@ bool Btree:: insert(Entry* item)
 			{
 				cout<<"an entry is the largest"<<endl;
 				//take out largest child2 to y. put item in a new leaf
-				y->entries[0]=current->entries[1];
+				y->entries[1]=current->entries[1];
 				current->entries[1]=item;
-				current->countEntries=1;
+				current->countEntries++;
+				y->countEntries=1;
 				
 				if (current->entries[0]->getkey()>current->entries[1]->getkey()) //adjust the entries that live in current so child2 is still larger
 				{
@@ -123,23 +124,19 @@ bool Btree:: insert(Entry* item)
 					}
 
 				currentparent->children[currentloc+1]=y;
-
-				if (current->countchildren<4)
-					currentparent->countchildren++;
-				//have y's parent point toxparent for future use
 				y->parent = currentparent;
-
-				for (int k=0; k<3;k++)
+				
+				if (current->countchildren<=4)
 				{
-					current->parent->keys[k]=fixkeys(current->parent, k);
+					currentparent->countchildren++;					
 				}
 			}
-			//increment as normal if leftover was a dummy node. this means the num of entries is 0 and its a dummy node we dont care about
-			//if ( leftovernode->entries[0]->getkey()==-1 && leftovernode->entries[1]->getkey()==-1)
-			//currentparent->countchildren++;
 			
 			//if the leafsplit requires no node split, update =parents keys here
-
+			for (int k=0; k<3;k++)
+			{
+				current->parent->keys[k]=fixkeys(current->parent, k);
+			}			
 
 			//since we're dealing with leaves here, the pushed out leaf node will have a non dummy entry if the node was previously full
 			//this means parent of current is full, call split
@@ -170,19 +167,25 @@ int Btree::fixkeys (BTreeNode *x, int index)
 	//step right
 	BTreeNode* temp = x->children[index+1]; 
 
-	//
-	if (temp==NULL) 
-		return -1;
 
 	while (temp!=NULL && !(temp->leaf))
 	{
 		temp=temp->children[0];
 	}
+
+	if (temp==NULL) 
+		return -1;	
 	
+	else{
 	if (temp->entries[0]->getkey()==-1)
 		keycorrection=temp->entries[1]->getkey();
 	else
 		keycorrection=temp->entries[0]->getkey();
+
+	cout<<"keycorrection is:"<<keycorrection<<endl;
+	}
+
+	
 
 	return keycorrection;
 }
@@ -218,6 +221,8 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 	y->keys[0]=fixkeys(y, 0);
 	y->keys[1]=fixkeys(y, 1);
 
+	cout<<"aftern ode split. try to check that x and y hold what you expect"<<endl;
+
 	//now onto 3 cases
 	//base case to handle root, do special things aka make new root with 2 children
 	if (x==root)
@@ -236,6 +241,8 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 
 		return;
 	}
+
+	//cout<<"not a root split. letsgoooooooo"<<endl;
 
 	//now that we have a new y, insert it as a child to xparent next to x
 	//find location of x, place y in next spot
@@ -273,17 +280,17 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 	bool leftovernodeisdummy;
 	for (int i=0; i<3; i++)
 	{
-		if (leftovernode==NULL||leftovernode->keys[i]>=0)
+		if (leftovernode&&leftovernode->keys[i]>=0)
 		{
-			leftovernodeisdummy=true;
+			leftovernodeisdummy=false;
 			break;
 		}
 		else
-			leftovernodeisdummy=false;
+			leftovernodeisdummy=true;
 	}
 
 	//basecase, parent is not full. Fix keys and stop 
-	if ( xparent-> countchildren<=4 && leftovernodeisdummy)
+	if ( xparent-> countchildren<=4 && leftovernodeisdummy==true)
 	{
 		//
 		for (int i=0; i<xparent->countchildren;i++)
@@ -297,7 +304,7 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 
 	//check if leftovernode has real entries or the dummy ones we implemented 
 	//CHECK FOR DUMMIES, THEY ARE NOT NULL AT HTIS POINT 
-	if (xparent->countchildren >= 4 && !leftovernode)
+	if (xparent->countchildren >= 4 && !leftovernodeisdummy)
 	{
 		cout<<"btreeccp line 265 inside the if, about to split node"<<endl;
 		splitnode(xparent,leftovernode);
