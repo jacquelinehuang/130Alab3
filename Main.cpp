@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string> 
+#include <vector>
 using namespace std;
 
 Graph aGraph;
@@ -22,8 +23,8 @@ void inputFile(){
 	std::vector<int> userAndFriends;
 
 	cout<<"Please enter a base file to read:"<< endl; 
-	cin>>filename;
-
+	//cin>>filename;
+	filename="textFile.txt"; //use this for testing sake
 	ifs.open(filename);
 	if (ifs.fail()){
 		std::cout<< "Couldn't find text file" << std::endl;
@@ -93,18 +94,43 @@ void inputFile(){
 void add ()
 {
 	vector <int> friendperms;
+	std::string name, genre1, genre2;
+	int userPerm;
+	std::string userInfo;
+	std::string semicolon = ";";
+	size_t pos = 0;
 
-    printf( "Enter data separated by commas and press enter");
+    printf( "Enter data separated by semicolons and press enter\n");
+	cin>>userInfo;
+
+	pos = userInfo.find(semicolon);
+	userPerm = std::stoi(userInfo.substr(0, pos));
+	userInfo.erase(0, pos + semicolon.length());
+			
+	pos = userInfo.find(semicolon);
+	name = userInfo.substr(0, pos);
+	userInfo.erase(0, pos + semicolon.length());
+		
+	pos = userInfo.find(semicolon);
+	genre1 = userInfo.substr(0, pos);
+	userInfo.erase(0, pos + semicolon.length());
+		
+	pos = userInfo.find(semicolon);
+	genre2 = userInfo.substr(0, pos);
+	userInfo.erase(0, pos + semicolon.length());
+		
+	User *u = new User (userPerm, name, genre1, genre2);	
     
-    int permreader;
-
-  
+	//STUB
+  	int permreader;  
 	printf( "Enter a friend's perm and press enter:");
-    cin>>permreader;
+    /*cin>>permreader;*/
 
+	permreader=2;
 	//User u = new User (perm, name, genre1, genre2)
 	//aGraph.
-	//aBTree->insert()
+
+	aBTree->insert(new Entry(u,permreader));
 }
 //find a user and print if you can find in Btree
 bool findUser(int perm)
@@ -114,10 +140,12 @@ bool findUser(int perm)
 	if (result->getkey()>0)
 	{
 		std::cout << "We found them!";
+		return true;
 	}
 	else
 	{
 		std::cout << "Cannot find user" << std::endl;
+		return false;
 	}
 }
 //search user
@@ -130,11 +158,9 @@ void findUserDetail (int perm)
 		result->getuser()->print();
 
 		int tableindex= result->getuserindex();
-		aGraph[]
+		//aGraph[]
 		//INCOMPLETE GRAPH PORTION HERE
 	}
-	else
-		 cout<<"Finduser is false. Not found.";
 }
 
 //takes perm as input, extracts users favorite genres and friends
@@ -181,7 +207,7 @@ int main(){
 			add();
 		}	
 		if (oper == 3){
-			cout<<<< "3) Find a user. Input their perm: " << endl
+			cout<< "3) Find a user. Input their perm: " << endl;
 			int x;
 			std::cin >> x;
 			while(std::cin.fail()) {
@@ -193,7 +219,7 @@ int main(){
 			findUser(x);
 		}	
 		if (oper == 4){
-			cout<<<< "4) Find a user's details. Enter their perm:" << endl
+			cout<< "4) Find a user's details. Enter their perm:" << endl;
 			int x;
 			std::cin >> x;
 			while(std::cin.fail()) {
@@ -217,6 +243,8 @@ int main(){
 			reccomendfriends(x);
 		}	
 		cout << endl << "Do you want to continue again? (y/n): ";
+		cin.clear();
+		std::cin.ignore(256,'\n');
 		cin >> answer;
 	}while (answer == 'y');
 	

@@ -11,11 +11,18 @@ class Graph
     //Graph ();
     int insertInGraph(std::vector<int> userAndFriends);
 	void print();
-    void DFS ();
 
+    void DFS ();
     //more necessary functions
-    void adjustfriends();
-    vector<int> getfriends(int index);
+    void addrelation(int u, int v) 
+    {
+        alist[u].pushback(v);
+        alist[v].pushback(u);
+    }
+
+    //we shouldhave a check for this. See if u and v are already related 
+
+    std::vector<int> getfriends(int index);
 
 };
 

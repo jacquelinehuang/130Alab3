@@ -8,6 +8,7 @@ using std::endl;
 //tester class to make sure btree works properly. not quite sure how to write this test class yet either
 int main ()
 {
+	int tracker;
 
 	std::ifstream ifs;
 	
@@ -80,10 +81,6 @@ int main ()
 	cout<< "searching for, 107 returns: " <<aBTree->search(107)->getkey()<<endl;
 	cout<< "searching for, 89 returns: " <<aBTree->search(89)->getkey()<<endl;
 
-
-
-
-
 		//insert to see if it picksup somethiing is wrong 
 	cout<<"make duplicate perm. what does it say?"<<endl;
 	aBTree->insert(new Entry (new User (1, "aa","aa","aa"),1) );
@@ -95,8 +92,9 @@ int main ()
 	aBTree->insert(new Entry (new User (154, "aa","aa","aa"),1) );
 	aBTree->insert(new Entry (new User (244, "aa","aa","aa"),1) );
 	aBTree->insert(new Entry (new User (0, "aa","aa","aa"),1) );
-//	aBTree->insert(new Entry (new User (173, "aa","aa","aa"),1) );
-//	aBTree->insert(new Entry (new User (125, "aa","aa","aa"),1) );
+	aBTree->insert(new Entry (new User (173, "aa","aa","aa"),1) );
+		tracker=125;
+	aBTree->insert(new Entry (new User (125, "aa","aa","aa"),1) );
 	aBTree->insert(new Entry (new User (109, "aa","aa","aa"),1) );
 	aBTree->insert(new Entry (new User (110, "aa","aa","aa"),1) );
 	aBTree->insert(new Entry (new User (111, "aa","aa","aa"),1) );
@@ -105,12 +103,13 @@ int main ()
 	cout<< "searching for, 154 returns: " <<aBTree->search(154)->getkey()<<endl;
 	cout<< "searching for, 244 returns: " <<aBTree->search(244)->getkey()<<endl;
 	cout<< "searching for, 0 returns: " <<aBTree->search(0)->getkey()<<endl;
-	//cout<< "searching for, 173 returns: " <<aBTree->search(173)->getkey()<<endl;
+	cout<< "searching for, 173 returns: " <<aBTree->search(173)->getkey()<<endl;
 	cout<< "searching for, 108 returns: " <<aBTree->search(108)->getkey()<<endl;
-	//cout<< "searching for, 125 returns: " <<aBTree->search(125)->getkey()<<endl;
+	cout<< "searching for, 125 returns: " <<aBTree->search(125)->getkey()<<endl;
 	cout<< "searching for, 109 returns: " <<aBTree->search(109)->getkey()<<endl;
 	cout<< "searching for, 110 returns: " <<aBTree->search(110)->getkey()<<endl;
 	cout<< "searching for, 111 returns: " <<aBTree->search(111)->getkey()<<endl;	
-	cout<< "searching for, 111 returns: " <<aBTree->search(305)->getkey()<<endl;	
+	cout<< "searching for, 305 returns: " <<aBTree->search(305)->getkey()<<endl;
+	
 	return 0;
 }
