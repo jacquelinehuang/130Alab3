@@ -39,6 +39,6 @@ class User{
 		void setGenre2 (std::string g2)  { genre2 = g2; }
 		void print()
 		{
-			std::cout<<"User of perm "<< perm<<" is " <<name<<" who likes movie genres 1)" <<genre1 << "and 2)" << genre2;
+			std::cout<<"perm: "<< perm<<" name: " <<name<<" likes movie genres: 1)" <<genre1 << " and 2)" << genre2;
 		}
 };

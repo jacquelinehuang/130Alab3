@@ -20,7 +20,7 @@ Btree::Btree(Entry* e){
 bool Btree:: insert(Entry* item)
 {
 
-cout<<"inserting...\n";
+//cout<<"inserting...\n";
 	//current is a leafnode, found as a byproduct of using search. 
 	Entry *foundentry =search(item->getkey());
 
@@ -60,7 +60,7 @@ cout<<"inserting...\n";
 		//2) If leaves are full, 
 		else{
 
-		cout<<"leaves are full"<<endl;
+		//cout<<"leaves are full"<<endl;
 		BTreeNode* leftovernode; //there will be one leaf that doesn't fit. if it's a dummy node, we don't care 
 
 			/*Leaf splits into two parts.
@@ -105,12 +105,12 @@ cout<<"inserting...\n";
 			{
 				if (currentparent->children[i]==current)
 				{
-					cout<<"in the currentloc determing forloop"<<endl;
+					//cout<<"in the currentloc determing forloop"<<endl;
 					currentloc=i;
 					break;
 				}
 			}
-			cout<<"currentlocis:"<<currentloc<<endl;
+			//cout<<"currentlocis:"<<currentloc<<endl;
 			//first move everything down a slot, so our leftover node from the split always holds the largest elements for sanity's sake			
 			//to make sure not to get a segfault if x is in slot 3. If x is in slot 3, y immediately is the leftovernode 
 			if (currentloc== 3)	{ 
@@ -122,7 +122,7 @@ cout<<"inserting...\n";
 				leftovernode= currentparent->children[3];
 				for (int n=3; n>currentloc; n--)
 					{
-						cout<<"leafmoving...\n";
+						//cout<<"leafmoving...\n";
 						currentparent-> children[n] = currentparent->children [n-1];
 					}
 				currentparent->children[currentloc+1]=y;
@@ -145,7 +145,7 @@ cout<<"inserting...\n";
 			{
 				if ( (current->parent->countchildren==4 && leftovernode->leaf && leftovernode->entries[1]->getkey()>0) )
 				{
-					cout<<"reached the splitnode option"<<endl;
+					//cout<<"reached the splitnode option"<<endl;
 					splitnode(current->parent, leftovernode);
 					//cout<<"after splitnodecall\n";
 				}
@@ -153,12 +153,12 @@ cout<<"inserting...\n";
 		}
 		//reset current.
 		current=root;
-		cout<<"treeclass message: insert returns true; perm is "<<item->getkey()<<endl;
+		//cout<<"treeclass message: insert returns true; perm is "<<item->getkey()<<endl;
 		return true;
 	}
 
 	//else number exists, we don't insert
-	cout<<"number exists, no insertion"<<endl;
+	//cout<<"number exists, no insertion"<<endl;
 	return false;
 }
 
@@ -275,7 +275,7 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 				xparent-> children[n] = xparent->children [n-1];
 			}
 		xparent->children[xloc+1]=y;
-		cout<<"splitnode attatching y to xparent."<<endl;
+		//cout<<"splitnode attatching y to xparent."<<endl;
 		y->parent = xparent;
 
 		//cout<<"btree splitnode of parent. the y node goes into location"<<xloc+1<<endl;
@@ -300,14 +300,14 @@ void Btree:: splitnode(BTreeNode* x, BTreeNode* leftovernode)
 	//basecase, parent is not full. Fix keys and stop 
 	if ( xparent-> countchildren<=4 && leftovernodepisdummy==true)
 	{
-		cout<<"reached the base splitting nodes case. We will adjust the keys to be correct hopefully. parent has number of keys"<<endl;
-		cout<<xparent->countchildren<<endl;
+		//cout<<"reached the base splitting nodes case. We will adjust the keys to be correct hopefully. parent has number of keys"<<endl;
+		//cout<<xparent->countchildren<<endl;
 		for (int i=0; i<xparent->countchildren-1;i++)
 		{
 			xparent->keys[i]=fixkeys(xparent, i);
 		}
 
-		cout<<"did we make it out of the fixkeys loop";
+		//cout<<"did we make it out of the fixkeys loop";
 		return;
 	}
 

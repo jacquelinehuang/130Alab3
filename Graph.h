@@ -14,8 +14,10 @@ class Graph
    public:
     int insertInGraph(std::vector<int> userAndFriends);
 	void print();
-    std::vector<User*>  DFS (int perm, Btree* aBTree);
-
+    std::vector<int> getfriends(int index);
+    //searches for new friends with same favorite genre and prints out perms of new friends
+    void DFS (int perm, Btree* aBTree);
+    void updateGraph(int indexInGraph, int friendPerm);
 };
 
 #endif

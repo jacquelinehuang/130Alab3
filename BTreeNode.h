@@ -50,7 +50,6 @@ public:
     countchildren=1;
     children[0]->entries[0]=start;
     children[0]->countEntries=1;
-    
     keys[0]=1+start->getkey();
 
   }
