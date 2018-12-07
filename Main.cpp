@@ -1,4 +1,3 @@
-#include "Btree.h"
 #include "Graph.h"
 #include <iostream>
 #include <fstream>
@@ -10,7 +9,7 @@ Graph aGraph;
 Btree *aBTree;
 std::vector<Entry*> entrymaker;
 
-//Takes reference to a file consisting of user info and makes Btree and friendship graph
+//Takes reference to a file consisting of user info and makes Btree and friendship graph CHECK!
 void inputFile(){
 	string filename;
 	std::ifstream ifs;
@@ -65,6 +64,8 @@ void inputFile(){
 		
 		//inserting in a graph and a tree		
 		int index = aGraph.insertInGraph(userAndFriends);
+
+		//inserting
 		entrymaker.push_back(new Entry (new User(userPerm, name, genre1, genre2), index) );
 		// will need to clean vector after each user!!!!
 		userAndFriends.clear();
@@ -93,44 +94,10 @@ void inputFile(){
 /* ADD HAS ISSUES*/
 void add ()
 {
-	vector <int> friendperms;
-	std::string name, genre1, genre2;
-	int userPerm;
-	std::string userInfo;
-	std::string semicolon = ";";
-	size_t pos = 0;
+	/*vector <int> userandfriendperms;
+	Entry *e addentry;
 
-    printf( "Enter data separated by semicolons and press enter\n");
-	cin>>userInfo;
-
-	pos = userInfo.find(semicolon);
-	userPerm = std::stoi(userInfo.substr(0, pos));
-	userInfo.erase(0, pos + semicolon.length());
-			
-	pos = userInfo.find(semicolon);
-	name = userInfo.substr(0, pos);
-	userInfo.erase(0, pos + semicolon.length());
-		
-	pos = userInfo.find(semicolon);
-	genre1 = userInfo.substr(0, pos);
-	userInfo.erase(0, pos + semicolon.length());
-		
-	pos = userInfo.find(semicolon);
-	genre2 = userInfo.substr(0, pos);
-	userInfo.erase(0, pos + semicolon.length());
-		
-	User *u = new User (userPerm, name, genre1, genre2);	
-    
-	//STUB
-  	int permreader;  
-	printf( "Enter a friend's perm and press enter:");
-    /*cin>>permreader;*/
-
-	permreader=2;
-	//User u = new User (perm, name, genre1, genre2)
-	//aGraph.
-
-	aBTree->insert(new Entry(u,permreader));
+	aBTree->insert(new Entry(u,permreader));*/
 }
 //find a user and print if you can find in Btree
 bool findUser(int perm)
@@ -158,6 +125,7 @@ void findUserDetail (int perm)
 		result->getuser()->print();
 
 		int tableindex= result->getuserindex();
+
 		//aGraph[]
 		//INCOMPLETE GRAPH PORTION HERE
 	}

@@ -2,12 +2,8 @@
 #define _GRAPH
 #include <vector>
 #include <stack> 
-#include "Graph.h"
 #include "Btree.h"
 #include <iostream>
-//#include <algorithm>  
-//#include "User.h"
-//#include "Entry.h"
 
 class Graph
 {
@@ -18,7 +14,7 @@ class Graph
    public:
     int insertInGraph(std::vector<int> userAndFriends);
 	void print();
-    void DFS (int perm, BTree* aBTree);
+    std::vector<User*>  DFS (int perm, Btree* aBTree);
 
 };
 

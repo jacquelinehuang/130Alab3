@@ -1,3 +1,4 @@
+#include "Graph.h"
 
 int Graph::insertInGraph(std::vector<int> userAndFriends){
 	// first elm of userAndFriends is userPerm and nextElms are friends' perms
@@ -33,21 +34,21 @@ bool Graph::isFriend(int userIndex, int potentialFriendPerm){
 	}
 	return false;
 }
-void Graph::DFS (int perm, BTree* aBTree){
+std::vector<User*>  Graph::DFS (int perm, Btree* aBTree){
 	std::vector<bool> alistIsVisited(alist.size(), false);
 	std::stack <int> aStack; 
-	std::vector<User> recommendations;
+	std::vector<User*> recommendations;
 	std::string genre1, genre2;
-	User nonFriend, user;
+	User *nonFriend, *user;
 	int indexOfUserInTable, index, j;
-	Entry anEntry;
+	Entry *anEntry;
 	
 	anEntry = aBTree->search(perm);
-	index = anEntry.getuserindex();
-	user = anEntry.getuser();
+	index = anEntry->getuserindex();
+	user = anEntry->getuser();
 	indexOfUserInTable = index;
-	genre1 = anEntry.getuser.getGenre1();
-	genre2 = anEntry.getuser.getGenre2();
+	genre1 = anEntry->getuser()->getGenre1();
+	genre2 = anEntry->getuser()->getGenre2();
 	alistIsVisited[index] = true;
 	aStack.push(index);
 	
@@ -63,11 +64,15 @@ void Graph::DFS (int perm, BTree* aBTree){
 		aStack.pop();
 		
 		if (!isFriend(indexOfUserInTable, alist[index][0])){
-			nonFriend = aBTree->search(alist[index][0]).getuser();
-			if (genre1 == nonFriend.getGenre1() | genre1 == nonFriend.getGenre2() | genre2 == nonFriend.getGenre1() | genre2 == nonFriend.getGenre2())
+			Entry * e= aBTree->search(alist[index][0]);
+			nonFriend = e->getuser(); //IS THIS HOW TO DEREF
+			if (genre1 == nonFriend->getGenre1() || genre1 == nonFriend->getGenre2() || genre2 == nonFriend->getGenre1() || genre2 == nonFriend->getGenre2())
 				recommendations.push_back(nonFriend);
-		}		
+		}
+
+
 	}
+	return recommendations;
 	/*sort(perms.begin(), recommendations.end()); 
   
     std::cout << "Sorted \n"; 
