@@ -1,3 +1,6 @@
+#ifndef _ENTRY
+#define _ENTRY
+
 #include "User.h"
 
 //a small header file for the data structure entries,
@@ -28,3 +31,4 @@ public:
 	int getkey() {return user->getPerm();}
 
 };
+#endif

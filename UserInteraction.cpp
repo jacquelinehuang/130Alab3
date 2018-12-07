@@ -55,11 +55,17 @@ void UserInteraction::inputFile(){
 		
 		//inserting in a graph and a tree		
 		int index = aGraph.insertInGraph(userAndFriends);
+		Entry * newEntry (newUser, index);
+		aBTree.insertInBTree(newEntry);
+		
 		
 		// will need to clean vector after each user!!!!
 		userAndFriends.clear();
 	}
-	aGraph.print();
+	//aGraph.print();
+}
+void UserInteraction::reccomendfriends (int perm){
+	//aGraph.DFS(perm, aBTree);
 }
 void UserInteraction::reccomendfriends (int perm){
 	//aGraph.DFS(perm, aBTree);

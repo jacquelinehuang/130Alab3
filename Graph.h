@@ -1,29 +1,24 @@
 #ifndef _GRAPH
 #define _GRAPH
 #include <vector>
+#include <stack> 
+#include "Graph.h"
+#include "Btree.h"
+#include <iostream>
+//#include <algorithm>  
+//#include "User.h"
+//#include "Entry.h"
 
 class Graph
 {
  private:
     std::vector<std::vector <int>> alist;
-
+	bool isFriend(int userIndex, int potentialFriendPerm);
+	int  find (int perm);
    public:
-    //Graph ();
     int insertInGraph(std::vector<int> userAndFriends);
 	void print();
-
-    void DFS ();
-    //more necessary functions
-    void addrelation(int u, int v) 
-    {
-        /*
-        alist[u].pushback(v);
-        alist[v].pushback(u);*/
-    }
-
-    //we shouldhave a check for this. See if u and v are already related 
-
-    std::vector<int> getfriends(int index);
+    void DFS (int perm, BTree* aBTree);
 
 };
 
